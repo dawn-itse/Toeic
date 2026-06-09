@@ -1,0 +1,290 @@
+{
+  "testId": "toeic-test-2026-v1",
+  "title": "TOEIC Practice Test v1",
+  "description": "Đề thi thử TOEIC đầy đủ 2 kỹ năng Nghe & Đọc (Toàn bộ 7 Parts)",
+  "durationMinutes": 120,
+  "totalQuestions": 200,
+  "audioUrl": "https://assets.yourdomain.com/audio/toeic_listening_full.mp3",
+  "groups": [
+    {
+      "groupId": "g-part1-q1",
+      "part": 1,
+      "direction": "Part 1: Action Photographs. For each question, you will hear four statements about a picture. Select the statement that best describes what you see in the picture.",
+      "passageText": null,
+      "passageImage": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=600&h=400&q=80",
+      "audioClip": {
+        "url": "https://assets.yourdomain.com/audio/toeic_part1_q1.mp3",
+        "startTime": 0.0,
+        "endTime": 45.0
+      },
+      "questions": [
+        {
+          "questionId": "q1",
+          "number": 1,
+          "questionText": "Look at the picture marked number 1 in your test book.",
+          "options": [
+            { "label": "A", "text": "They are shaking hands in an office.", "isSpokenOnly": true },
+            { "label": "B", "text": "They are analyzing a document on the laptop.", "isSpokenOnly": true },
+            { "label": "C", "text": "They are leaving the conference room.", "isSpokenOnly": true },
+            { "label": "D", "text": "They are standing near the window.", "isSpokenOnly": true }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Trong ảnh, hai người đang tập trung học tập/làm việc chung và phân tích tài liệu hiển thị trên màn hình laptop đặt trên bàn họp phòng khách công ty. Phương án B mô tả đúng nhất hoạt động thực tế."
+        }
+      ]
+    },
+    {
+      "groupId": "g-part2-q11",
+      "part": 2,
+      "direction": "Part 2: Question-Response. You will hear a question or statement and three responses. Select the best response.",
+      "passageText": null,
+      "passageImage": null,
+      "audioClip": {
+        "url": null,
+        "startTime": 235.0,
+        "endTime": 258.0
+      },
+      "questions": [
+        {
+          "questionId": "q11",
+          "number": 11,
+          "questionText": "Where is the marketing department located?",
+          "options": [
+            { "label": "A", "text": "On the third floor.", "isSpokenOnly": true },
+            { "label": "B", "text": "At 2 PM tomorrow.", "isSpokenOnly": true },
+            { "label": "C", "text": "Yes, I agree with you.", "isSpokenOnly": true }
+          ],
+          "correctAnswer": "A",
+          "explanation": "Câu hỏi bắt đầu với 'Where' yêu cầu tìm một địa điểm. 'On the third floor' (Ở tầng ba) là câu trả lời chỉ nơi chốn phù hợp nhất. Loại B (thời gian) và C (câu trả lời Yes/No)."
+        }
+      ]
+    },
+    {
+      "groupId": "g-part3-q32-34",
+      "part": 3,
+      "direction": "Part 3: Conversations. You will hear some conversations between two or more people. You will be asked to answer three questions about what the speakers say.",
+      "passageText": null,
+      "passageImage": null,
+      "audioClip": {
+        "url": null,
+        "startTime": 540.0,
+        "endTime": 612.0
+      },
+      "questions": [
+        {
+          "questionId": "q32",
+          "number": 32,
+          "questionText": "What does the woman worry about?",
+          "options": [
+            { "label": "A", "text": "The project deadline is too strict.", "isSpokenOnly": false },
+            { "label": "B", "text": "The budget might exceed the estimate.", "isSpokenOnly": false },
+            { "label": "C", "text": "The target software is crashing.", "isSpokenOnly": false },
+            { "label": "D", "text": "The client rejected the proposal.", "isSpokenOnly": false }
+          ],
+          "correctAnswer": "A",
+          "explanation": "Người phụ nữ mở đầu cuộc trò chuyện: 'I am concerned that we only have two days left to complete this technical report.' -> lo lắng về thời hạn dự án quá gấp rút."
+        },
+        {
+          "questionId": "q33",
+          "number": 33,
+          "questionText": "What does the man suggest doing?",
+          "options": [
+            { "label": "A", "text": "Hiring a local consultant.", "isSpokenOnly": false },
+            { "label": "B", "text": "Asking for assistance from the design department.", "isSpokenOnly": false },
+            { "label": "C", "text": "Canceling the scheduled product release.", "isSpokenOnly": false },
+            { "label": "D", "text": "Purchasing more office supplies.", "isSpokenOnly": false }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Người đàn ông phản hồi: 'We should ask the design department to help us format the charts.' -> đề xuất xin sự trợ giúp từ bộ phận thiết kế."
+        },
+        {
+          "questionId": "q34",
+          "number": 34,
+          "questionText": "What will the speakers probably do next?",
+          "options": [
+            { "label": "A", "text": "Call their manager.", "isSpokenOnly": false },
+            { "label": "B", "text": "Send an email request.", "isSpokenOnly": false },
+            { "label": "C", "text": "Take a short lunch break.", "isSpokenOnly": false },
+            { "label": "D", "text": "Draft a contract agreement.", "isSpokenOnly": false }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Người phụ nữ đồng ý và nói: 'Good idea. I'll compose an email to their supervisor right away.' -> Họ sẽ gửi yêu cầu qua email."
+        }
+      ]
+    },
+    {
+      "groupId": "g-part4-q71-73",
+      "part": 4,
+      "direction": "Part 4: Short Talks. You will hear some short talks given by a single speaker. You will be asked to answer three questions about what the speaker says.",
+      "passageText": null,
+      "passageImage": "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&h=400&q=80",
+      "audioClip": {
+        "url": null,
+        "startTime": 1280.0,
+        "endTime": 1345.0
+      },
+      "questions": [
+        {
+          "questionId": "q71",
+          "number": 71,
+          "questionText": "Where is the announcement most likely being made?",
+          "options": [
+            { "label": "A", "text": "At a commuter train station.", "isSpokenOnly": false },
+            { "label": "B", "text": "Inside a retail clothing store.", "isSpokenOnly": false },
+            { "label": "C", "text": "At an international airport departure gate.", "isSpokenOnly": false },
+            { "label": "D", "text": "In a corporate lobby.", "isSpokenOnly": false }
+          ],
+          "correctAnswer": "C",
+          "explanation": "Lời mở đầu thông báo: 'May I have your attention, passengers for Flight 382 to London, boarding is now delayed...' -> thông báo trực tiếp tại cổng khởi hành sân bay."
+        },
+        {
+          "questionId": "q72",
+          "number": 72,
+          "questionText": "What is the primary cause of the delay?",
+          "options": [
+            { "label": "A", "text": "Severe weather conditions.", "isSpokenOnly": false },
+            { "label": "B", "text": "An unexpected mechanical inspection.", "isSpokenOnly": false },
+            { "label": "C", "text": "A missing cabin crew member.", "isSpokenOnly": false },
+            { "label": "D", "text": "Traffic congestion on the runway.", "isSpokenOnly": false }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Người nói nêu lý do: '...due to a routine mechanical inspection that is taking longer than expected.' -> chậm trễ do kiểm tra kỹ thuật định kỳ."
+        },
+        {
+          "questionId": "q73",
+          "number": 73,
+          "questionText": "What compensation is offered to the passengers?",
+          "options": [
+            { "label": "A", "text": "A discount coupon for future bookings.", "isSpokenOnly": false },
+            { "label": "B", "text": "A complimentary meal voucher.", "isSpokenOnly": false },
+            { "label": "C", "text": "A free hotel room upgrade.", "isSpokenOnly": false },
+            { "label": "D", "text": "Full refund of the baggage fee.", "isSpokenOnly": false }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Người nói tiếp tục: 'Please visit our service desk near gate 12 to receive a complimentary meal voucher.' -> phát voucher ăn uống miễn phí."
+        }
+      ]
+    },
+    {
+      "groupId": "g-part5-q101",
+      "part": 5,
+      "direction": "Part 5: Incomplete Sentences. Select the best answer of the choices given to complete the sentence.",
+      "passageText": null,
+      "passageImage": null,
+      "audioClip": null,
+      "questions": [
+        {
+          "questionId": "q101",
+          "number": 101,
+          "questionText": "The firm's new chief financial officer will oversee the ________ of the corporate budget next Tuesday.",
+          "options": [
+            { "label": "A", "text": "present", "isSpokenOnly": false },
+            { "label": "B", "text": "preservation", "isSpokenOnly": false },
+            { "label": "C", "text": "presentation", "isSpokenOnly": false },
+            { "label": "D", "text": "presenting", "isSpokenOnly": false }
+          ],
+          "correctAnswer": "C",
+          "explanation": "Sau mạo từ xác định 'the' và trước giới từ 'of' cần một danh từ số ít làm trung tâm ngữ. 'presentation' (sự thuyết trình/trình bày) là từ phù hợp ngữ pháp và ngữ nghĩa nhất trong hoàn cảnh này."
+        }
+      ]
+    },
+    {
+      "groupId": "g-part6-q131-134",
+      "part": 6,
+      "direction": "Part 6: Text Completion. Read the text below. A word, phrase, or sentence is missing in some of the sentences. Select the best answer to complete each blank.",
+      "passageText": "Subject: Welcome to Apex Global! \nDear Team, \nWe are thrilled to announce that Julia Roberts has joined Apex Global as our new Director of Marketing. Julia brings over twelve years of executive experiences from leading silicon valley agencies. In her new role, she will be responsible for leading our upcoming international expansion strategies. \nShe is incredibly ________ [131] to meet everyone. Please join us in welcoming her during a brief welcome coffee hour ________ [132] tomorrow in the fourth-floor cafeteria. We believe her dynamic expertise will greatly contribute to ________ [133] our brand visibility. ________ [134].",
+      "passageImage": null,
+      "audioClip": null,
+      "questions": [
+        {
+          "questionId": "q131",
+          "number": 131,
+          "questionText": "Select the best choice for blank [131].",
+          "options": [
+            { "label": "A", "text": "eager", "isSpokenOnly": false },
+            { "label": "B", "text": "eagerness", "isSpokenOnly": false },
+            { "label": "C", "text": "eagerly", "isSpokenOnly": false },
+            { "label": "D", "text": "more eager", "isSpokenOnly": false }
+          ],
+          "correctAnswer": "A",
+          "explanation": "Cấu trúc chủ ngữ số ít 'She' + động từ tobe 'is' + trạng từ 'incredibly' + tính từ 'eager' + động từ nguyên thể 'to meet' (Cô ấy cực kỳ háo hức được gặp mọi người)."
+        },
+        {
+          "questionId": "q132",
+          "number": 132,
+          "questionText": "Select the best choice for blank [132].",
+          "options": [
+            { "label": "A", "text": "hold", "isSpokenOnly": false },
+            { "label": "B", "text": "holding", "isSpokenOnly": false },
+            { "label": "C", "text": "held", "isSpokenOnly": false },
+            { "label": "D", "text": "will hold", "isSpokenOnly": false }
+          ],
+          "correctAnswer": "C",
+          "explanation": "Dùng phân từ rút gọn dạng bị động 'held' để bổ nghĩa cho cụm danh từ phía trước 'coffee hour' (tiệc cà phê đón tiếp được tổ chức vào ngày mai)."
+        },
+        {
+          "questionId": "q133",
+          "number": 133,
+          "questionText": "Select the best choice for blank [133].",
+          "options": [
+            { "label": "A", "text": "boost", "isSpokenOnly": false },
+            { "label": "B", "text": "boosting", "isSpokenOnly": false },
+            { "label": "C", "text": "boosted", "isSpokenOnly": false },
+            { "label": "D", "text": "booster", "isSpokenOnly": false }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Sau cấu trúc giới từ 'contribute to' là một danh động từ hoặc cụm danh từ chỉ hoạt động đóng góp. Do đó chọn 'boosting'."
+        },
+        {
+          "questionId": "q134",
+          "number": 134,
+          "questionText": "Select the best choice for blank [134].",
+          "options": [
+            { "label": "A", "text": "Her office is located next to the main conference hall.", "isSpokenOnly": false },
+            { "label": "B", "text": "Please note that all files must be submitted by Monday morning.", "isSpokenOnly": false },
+            { "label": "C", "text": "Therefore, our annual sales report needs urgent revision.", "isSpokenOnly": false },
+            { "label": "D", "text": "She decided to cancel her flight to Chicago.", "isSpokenOnly": false }
+          ],
+          "correctAnswer": "A",
+          "explanation": "Trong email chào mừng nhân sự mới, câu cuối giới thiệu vị trí định hướng văn phòng của cô ấy ở cạnh hội trường chính là mạch lạc và logic nhất."
+        }
+      ]
+    },
+    {
+      "groupId": "g-part7-q147-148",
+      "part": 7,
+      "direction": "Part 7: Reading Comprehension. Read the emails below and answer the following questions.",
+      "passageText": "From: customer.service@techmall.com \nTo: Julian.brown@email.com \nDate: June 8, 2026 \nSubject: Order Status - #TM-89472 \n\nDear Mr. Brown, \nThank you for purchasing the TechMall Ultra Tab 10 on our website. We are writing to inform you that your shipment has been picked up by our local logistics courier service today. It is scheduled to be delivered directly to your registered residential address on or before Thursday, June 11. \nPlease note that a signature will be required upon package arrival because of the high value of the item. If you will not be available at home, you may authorize a neighbor to sign for it, or schedule alternate delivery options via the tracking portal below. \n\nWarm regards, \nTechMall Shipping Support Team",
+      "passageImage": null,
+      "audioClip": null,
+      "questions": [
+        {
+          "questionId": "q147",
+          "number": 147,
+          "questionText": "What item did Mr. Brown purchase?",
+          "options": [
+            { "label": "A", "text": "A logistics vehicle", "isSpokenOnly": false },
+            { "label": "B", "text": "A tablet device", "isSpokenOnly": false },
+            { "label": "C", "text": "A signature pen", "isSpokenOnly": false },
+            { "label": "D", "text": "A desk calendar", "isSpokenOnly": false }
+          ],
+          "correctAnswer": "B",
+          "explanation": "Email ghi rõ: 'Thank you for purchasing the TechMall Ultra Tab 10...' -> Tab ở đây viết tắt của Tablet (máy tính bảng)."
+        },
+        {
+          "questionId": "q148",
+          "number": 148,
+          "questionText": "Why is a signature required upon package delivery?",
+          "options": [
+            { "label": "A", "text": "The delivery is sent express.", "isSpokenOnly": false },
+            { "label": "B", "text": "The neighbor requested it.", "isSpokenOnly": false },
+            { "label": "C", "text": "The item is expensive.", "isSpokenOnly": false },
+            { "label": "D", "text": "The courier is a new contractor.", "isSpokenOnly": false }
+          ],
+          "correctAnswer": "C",
+          "explanation": "Chi tiết trong văn bản: '...a signature will be required upon package arrival because of the high value of the item.' -> do món hàng có giá trị cao (expensive/high value)."
+        }
+      ]
+    }
+  ]
+}

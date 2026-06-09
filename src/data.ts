@@ -1,0 +1,300 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { Card, Deck, LearnState, DailyQuest } from './types';
+import { VOCAB_327_CARDS } from './vocabData327';
+
+export const INITIAL_DECKS: Deck[] = [
+  {
+    id: 'deck-toeic',
+    name: 'Từ vựng Toeic',
+    description: 'Bản số hóa trọn bộ 327+ từ vựng trọng tâm thường gặp trong các kì thi TOEIC và giao tiếp quốc tế, tích hợp công cụ ghi nhớ thông minh.',
+    category: 'Tiếng Anh luyện thi',
+    image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=80',
+  }
+];
+
+export const INITIAL_CARDS: Card[] = [
+  // Deck: Common Phrases (converted to deck-toeic)
+  {
+    id: 'card-1',
+    deckId: 'deck-toeic',
+    front: 'never mind',
+    back: 'Đừng lo lắng về điều đó, nó không quan trọng đâu.',
+    example: 'Never mind, we can always try again tomorrow.',
+    status: 'CẦN ÔN',
+    streakCount: 2,
+  },
+  {
+    id: 'card-2',
+    deckId: 'deck-toeic',
+    front: 'piece of cake',
+    back: 'Dễ như ăn bánh, vô cùng đơn giản.',
+    example: "Don't worry about the English test; it's a piece of cake!",
+    status: 'MỚI',
+    streakCount: 0,
+  },
+  {
+    id: 'card-3',
+    deckId: 'deck-toeic',
+    front: 'break a leg',
+    back: 'Chúc may mắn (thường dùng trước khi lên sân khấu biểu diễn).',
+    example: 'You have a big presentation today, break a leg!',
+    status: 'CẦN ÔN',
+    streakCount: 3,
+  },
+  {
+    id: 'card-4',
+    deckId: 'deck-toeic',
+    front: 'on cloud nine',
+    back: 'Cực kỳ hạnh phúc, sung sướng nhảy lên chín tầng mây.',
+    example: 'He was on cloud nine after receiving the acceptance letter.',
+    status: 'ĐÃ THUỘC',
+    streakCount: 5,
+  },
+  {
+    id: 'card-5',
+    deckId: 'deck-toeic',
+    front: 'under the weather',
+    back: 'Cảm thấy không được khỏe, mệt mỏi trong người.',
+    example: 'I’m feeling a bit under the weather, so I’ll stay home today.',
+    status: 'ĐANG HỌC',
+    streakCount: 1,
+  },
+
+  // Deck: Toeic Terms
+  {
+    id: 'card-toeic-1',
+    deckId: 'deck-toeic',
+    front: 'negotiation',
+    back: 'Sự đàm phán, cuộc thương lượng giải quyết mâu thuẫn.',
+    example: 'The contract is still under negotiation.',
+    status: 'ĐÃ THUỘC',
+    streakCount: 5,
+  },
+  {
+    id: 'card-toeic-2',
+    deckId: 'deck-toeic',
+    front: 'reimbursement',
+    back: 'Sự hoàn tiền, bồi hoàn các khoản chi phí đã thanh toán trước.',
+    example: 'Please submit all your travel receipts for reimbursement.',
+    status: 'ĐÃ THUỘC',
+    streakCount: 6,
+  },
+  {
+    id: 'card-toeic-3',
+    deckId: 'deck-toeic',
+    front: 'consultant',
+    back: 'Người tư vấn, cố vấn viên chuyên môn trong ngành.',
+    example: 'The company hired a human resources consultant to improve culture.',
+    status: 'ĐÃ THUỘC',
+    streakCount: 7,
+  },
+  {
+    id: 'card-toeic-4',
+    deckId: 'deck-toeic',
+    front: 'implement',
+    back: 'Thi hành, triển khai, thực hiện một chính sách hay kế hoạch.',
+    example: 'We intend to implement these workplace policies starting next month.',
+    status: 'ĐÃ THUỘC',
+    streakCount: 6,
+  },
+
+  // Newly converted English study vocabulary cards (was Latin)
+  {
+    id: 'card-latin-1',
+    deckId: 'deck-toeic',
+    front: 'acquire',
+    back: 'Thu gom, mua lại, đạt được.',
+    example: 'Our primary business objective this quarter is to acquire new customers.',
+    status: 'ĐÃ THUỘC',
+    streakCount: 4,
+  },
+  {
+    id: 'card-latin-2',
+    deckId: 'deck-toeic',
+    front: 'persist',
+    back: 'Kiên trì, bền bỉ theo đuổi.',
+    example: 'Experienced negotiators always persist in resolving complex conflicts.',
+    status: 'CẦN ÔN',
+    streakCount: 2,
+  },
+  {
+    id: 'card-latin-3',
+    deckId: 'deck-toeic',
+    front: 'accommodate',
+    back: 'Cung cấp chỗ ở, đáp ứng nhu cầu.',
+    example: 'The grand conference venue can comfortably accommodate over 500 guests.',
+    status: 'MỚI',
+    streakCount: 0,
+  },
+  {
+    id: 'card-latin-4',
+    deckId: 'deck-toeic',
+    front: 'generate',
+    back: 'Tạo ra, phát sinh ra.',
+    example: 'Our newly launched marketing activities help generate numerous sales leads.',
+    status: 'ĐÃ THUỘC',
+    streakCount: 5,
+  },
+  {
+    id: 'card-latin-5',
+    deckId: 'deck-toeic',
+    front: 'facilitate',
+    back: 'Tạo điều kiện thuận lợi, hỗ trợ tiến trình.',
+    example: 'Modern open-space offices facilitate better team communication and collaboration.',
+    status: 'CẦN ÔN',
+    streakCount: 1,
+  },
+  ...VOCAB_327_CARDS.map(c => ({ ...c, deckId: 'deck-toeic' }))
+];
+
+const STORAGE_KEY = 'zencards_app_state';
+// Bump this version whenever INITIAL_CARDS changes (e.g. new vocab added).
+// The loader will detect a mismatch and re-sync cards from the latest source.
+const CARDS_VERSION = INITIAL_CARDS.length;
+
+export function loadState(): LearnState {
+  const defaultQuests: DailyQuest[] = [
+    {
+      id: 'quest-review',
+      title: 'Người đọc mẫn cán',
+      description: 'Ôn tập 5 thẻ học tập bất kỳ trong ngày',
+      target: 5,
+      current: 0,
+      xpReward: 20,
+      completed: false,
+      category: 'REVIEW'
+    },
+    {
+      id: 'quest-spell',
+      title: 'Đại tài chính tả',
+      description: 'Trả lời đúng 3 từ trong chế độ Điền từ',
+      target: 3,
+      current: 0,
+      xpReward: 30,
+      completed: false,
+      category: 'SPELL'
+    },
+    {
+      id: 'quest-ipa',
+      title: 'Bậc thầy âm tiết',
+      description: 'Luyện nghe & đọc 3 âm tiết trong bảng IPA',
+      target: 3,
+      current: 0,
+      xpReward: 25,
+      completed: false,
+      category: 'IPA'
+    }
+  ];
+
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as LearnState;
+      // If loaded state has other old decks or is missing the main deck-toeic, reset it
+      const hasOtherDecks = parsed.decks && (parsed.decks.length !== 1 || parsed.decks[0].id !== 'deck-toeic');
+      if (hasOtherDecks) {
+        localStorage.removeItem(STORAGE_KEY);
+      } else if (parsed.decks && parsed.cards) {
+        // Hydrate gamification attributes if missing
+        if (parsed.xp === undefined) parsed.xp = 180;
+        if (parsed.level === undefined) parsed.level = 3;
+        if (parsed.hearts === undefined) parsed.hearts = 5;
+        if (parsed.unlimitedHearts === undefined) parsed.unlimitedHearts = false;
+        if (parsed.quests === undefined || parsed.quests.length === 0) {
+          parsed.quests = defaultQuests;
+        }
+
+        // --- Card sync: merge any new cards from INITIAL_CARDS not yet in storage ---
+        // Handles the case where new vocab was added but localStorage holds the old set.
+        if (parsed.cards.length < CARDS_VERSION) {
+          const existingIds = new Set(parsed.cards.map((c: Card) => c.id));
+          const newCards = INITIAL_CARDS.filter(c => !existingIds.has(c.id));
+          if (newCards.length > 0) {
+            parsed.cards = [...parsed.cards, ...newCards];
+          }
+          parsed.decks = INITIAL_DECKS;
+        }
+
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.error('Failed to load storage state: ', e);
+  }
+
+  // Fallback to initial seed
+  return {
+    decks: INITIAL_DECKS,
+    cards: INITIAL_CARDS,
+    streak: 14,
+    todayReviewedCount: 85,
+    todayGoal: 120,
+    xp: 180,
+    level: 3,
+    hearts: 5,
+    unlimitedHearts: false,
+    quests: defaultQuests,
+    lastActiveDate: new Date().toLocaleDateString()
+  };
+}
+
+export function saveState(state: LearnState) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.error('Failed to save state to localStorage: ', e);
+  }
+}
+
+/**
+ * Custom logic to display the masked word for the filling game.
+ * Standardizes things like converting `never mind` into `n_ve_r m_nd` as requested!
+ */
+export function getMaskedDisplay(word: string): string {
+  const clean = word.toLowerCase();
+  
+  // Hardcode requested specific representation for the mockup
+  if (clean === 'never mind') {
+    return 'n _ v e _ r   m _ n d';
+  }
+  
+  if (clean === 'piece of cake') {
+    return 'p _ e _ e   o _   c _ k e';
+  }
+
+  if (clean === 'break a leg') {
+    return 'b _ e _ k   a   l _ g';
+  }
+
+  if (clean === 'on cloud nine') {
+    return 'o _   c _ o _ d   n _ n e';
+  }
+
+  if (clean === 'under the weather') {
+    return 'u _ d _ r   t _ e   w _ a _ h _ r';
+  }
+
+  // Dynamic vowel-masking for fallback
+  return Array.from(clean).map((char, index) => {
+    if (char === ' ') return '   ';
+    // Mask vowels except index 0 or every alternate vowel to make it fun
+    const isVowel = ['a', 'e', 'i', 'o', 'u'].includes(char);
+    if (isVowel && index % 2 !== 0) {
+      return '_';
+    }
+    return char;
+  }).join(' ');
+}
+
+/**
+ * Checks whether user guess matches the word (case-insensitive, trims white spaces & double spaces)
+ */
+export function verifyAnswer(original: string, guess: string): boolean {
+  const normOriginal = original.toLowerCase().replace(/\s+/g, ' ').trim();
+  const normGuess = guess.toLowerCase().replace(/\s+/g, ' ').trim();
+  return normOriginal === normGuess;
+}

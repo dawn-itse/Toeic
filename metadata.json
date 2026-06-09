@@ -1,0 +1,6 @@
+{
+  "name": "ZenCards",
+  "description": "Ứng dụng học tiếng Anh qua flashcard tập trung sâu",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
