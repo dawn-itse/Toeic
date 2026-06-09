@@ -21,8 +21,15 @@ import {
   Check,
   AlertTriangle,
   HelpCircle,
-  PlayCircle
+  PlayCircle,
+  Focus,
+  Maximize,
+  Minimize,
+  SkipBack,
+  SkipForward,
+  RefreshCw
 } from 'lucide-react';
+import { fireConfettiBig } from '../utils/confetti';
 
 // Simplified model for TOEIC Test Structure
 interface ToeicQuestion {
@@ -129,6 +136,12 @@ export default function ToeicPractice() {
   const [userAnswers, setUserAnswers] = useState<{ [questionId: number]: string }>({});
   const [isAnswerSheetOpen, setIsAnswerSheetOpen] = useState<boolean>(true);
 
+  // ✅ FOCUS MODE state
+  const [isFocusMode, setIsFocusMode] = useState<boolean>(false);
+
+  // Auto-save key per test
+  const AUTOSAVE_KEY = 'toeic_autosave_answers';
+
   // History state loaded from local storage
   const [attemptHistory, setAttemptHistory] = useState<TestAttempt[]>([]);
 
@@ -155,6 +168,100 @@ export default function ToeicPractice() {
       }
     }
   }, []);
+
+  // ✅ AUTO-SAVE: Lưu đáp án mỗi khi userAnswers thay đổi
+  useEffect(() => {
+    if (viewMode === 'exam' && activeTest) {
+      localStorage.setItem(AUTOSAVE_KEY, JSON.stringify({
+        testId: activeTest.id,
+        answers: userAnswers,
+        questionIndex: currentQuestionIndex,
+        timeLeft,
+        examMode
+      }));
+    }
+  }, [userAnswers, currentQuestionIndex]);
+
+  // ✅ AUTO-RESTORE: Khôi phục đáp án khi bắt đầu lại đề thi (sau F5)
+  const tryRestoreAutoSave = (testId: string): { answers: Record<number, string>; questionIndex: number } | null => {
+    try {
+      const raw = localStorage.getItem(AUTOSAVE_KEY);
+      if (!raw) return null;
+      const saved = JSON.parse(raw);
+      if (saved.testId === testId && Object.keys(saved.answers).length > 0) {
+        return { answers: saved.answers, questionIndex: saved.questionIndex || 0 };
+      }
+    } catch (e) { /* ignore */ }
+    return null;
+  };
+
+  // ✅ KEYBOARD SHORTCUTS
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Bỏ qua khi đang gõ vào input/textarea
+      const target = e.target as HTMLElement;
+      if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return;
+
+      if (viewMode === 'exam') {
+        // Space: Play/Pause audio
+        if (e.code === 'Space') {
+          e.preventDefault();
+          togglePlayAudio();
+        }
+        // Arrow Left: Tua lùi 5 giây
+        if (e.code === 'ArrowLeft') {
+          e.preventDefault();
+          if (audioRef.current) {
+            audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5);
+            setCurrentTime(audioRef.current.currentTime);
+          }
+        }
+        // Arrow Right: Tua tiến 5 giây
+        if (e.code === 'ArrowRight') {
+          e.preventDefault();
+          if (audioRef.current) {
+            audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 5);
+            setCurrentTime(audioRef.current.currentTime);
+          }
+        }
+        // Enter: Nộp bài
+        if (e.code === 'Enter' && e.ctrlKey) {
+          e.preventDefault();
+          if (window.confirm('Nhấn Ctrl+Enter để nộp bài. Bạn có chắc chưa?')) {
+            handleSubmitExam();
+          }
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [viewMode, isPlaying, duration]);
+
+  // ✅ FOCUS MODE: Fullscreen + ẩn sidebar
+  const toggleFocusMode = () => {
+    if (!isFocusMode) {
+      // Bật focus mode: fullscreen
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+      // Ẩn sidebar bằng cách thêm class vào container app
+      const sidebar = document.querySelector('[class*="ml-64"]')?.previousElementSibling as HTMLElement;
+      if (sidebar) sidebar.style.display = 'none';
+      const mainContent = document.querySelector('.ml-64') as HTMLElement;
+      if (mainContent) mainContent.style.marginLeft = '0';
+    } else {
+      // Tắt focus mode
+      if (document.exitFullscreen && document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
+      const sidebar = document.querySelector('[id="zencards-app-container"] > div:first-child') as HTMLElement;
+      if (sidebar) sidebar.style.display = '';
+      const mainContent = document.querySelector('.ml-64') as HTMLElement;
+      if (mainContent) mainContent.style.marginLeft = '';
+    }
+    setIsFocusMode(!isFocusMode);
+  };
 
   // Save attempt to history
   const saveAttempt = (attempt: TestAttempt) => {
@@ -653,15 +760,29 @@ export default function ToeicPractice() {
     setActiveTest(test);
     setExamMode(mode);
     setViewMode('exam');
-    setUserAnswers({});
-    setCurrentQuestionIndex(0);
-    
-    // Filter questions index based on mode
-    let initialIndex = 0;
-    if (mode === 'reading') {
-      initialIndex = 100; // Question 101
+
+    // ✅ Thử khôi phục auto-save nếu có
+    const restored = tryRestoreAutoSave(test.id);
+    if (restored && Object.keys(restored.answers).length > 0) {
+      const confirmRestore = window.confirm(
+        `Hệ thống phát hiện bài làm dở dang của bạn (${Object.keys(restored.answers).length} câu đã trả lời). Bạn có muốn tiếp tục từ chỗ dang dở không?\n\n✅ OK = Tiếp tục làm tiếp\n❌ Hủy = Bắt đầu lại từ đầu`
+      );
+      if (confirmRestore) {
+        setUserAnswers(restored.answers);
+        setCurrentQuestionIndex(restored.questionIndex);
+      } else {
+        setUserAnswers({});
+        localStorage.removeItem(AUTOSAVE_KEY);
+        let initialIndex = 0;
+        if (mode === 'reading') initialIndex = 100;
+        setCurrentQuestionIndex(initialIndex);
+      }
+    } else {
+      setUserAnswers({});
+      let initialIndex = 0;
+      if (mode === 'reading') initialIndex = 100;
+      setCurrentQuestionIndex(initialIndex);
     }
-    setCurrentQuestionIndex(initialIndex);
 
     // Set time according to mode
     let durationSec = 120 * 60;
@@ -812,6 +933,14 @@ export default function ToeicPractice() {
     };
 
     setScoreResult(result);
+
+    // ✅ Xóa auto-save sau khi nộp bài thành công
+    localStorage.removeItem(AUTOSAVE_KEY);
+
+    // ✅ Pháo hoa ăn mừng nếu điểm >= 500 (tương đương thi khá)
+    if (scaledScore.total >= 500) {
+      setTimeout(() => fireConfettiBig(), 600);
+    }
 
     // Save attempt recording to localStorage
     const attempt: TestAttempt = {
@@ -975,7 +1104,7 @@ export default function ToeicPractice() {
 
       {/* 2. EXAM WORKSPACE ROOM */}
       {viewMode === 'exam' && activeTest && (
-        <div className="space-y-6 animate-fade-in relative">
+        <div className={`space-y-6 animate-fade-in relative transition-all duration-300 ${isFocusMode ? 'bg-[#F0F0E8] min-h-screen p-6 rounded-2xl' : ''}`}>
           
           {/* Top Info Bar with Countdown Timer */}
           <div className="bg-white p-4 rounded-xl border border-[#E0E0D6] flex flex-wrap items-center justify-between gap-4 sticky top-0 z-20 shadow-sm">
@@ -985,6 +1114,7 @@ export default function ToeicPractice() {
                   if (window.confirm("Bạn có chắc chắn muốn thoát khỏi phòng thi? Dự án tiến trình hiện tại chưa nộp bài sẽ bị hủy bỏ.")) {
                     setIsTimerRunning(false);
                     if (audioRef.current) audioRef.current.pause();
+                    if (isFocusMode) toggleFocusMode();
                     setViewMode('list');
                   }
                 }}
@@ -1001,7 +1131,21 @@ export default function ToeicPractice() {
               </span>
             </div>
 
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3">
+              {/* ✅ NÚT FOCUS MODE */}
+              <button
+                onClick={toggleFocusMode}
+                title={isFocusMode ? 'Thoát chế độ tập trung (Esc)' : 'Bật chế độ tập trung toàn màn hình'}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-semibold transition-all cursor-pointer active:scale-95 ${
+                  isFocusMode
+                    ? 'bg-[#5A5A40] text-white border-[#5A5A40]'
+                    : 'bg-[#F5F5F0] text-[#5A5A40] border-[#E0E0D6] hover:bg-[#EAEAE3]'
+                }`}
+              >
+                {isFocusMode ? <Minimize className="w-3.5 h-3.5" /> : <Maximize className="w-3.5 h-3.5" />}
+                <span className="hidden sm:inline">{isFocusMode ? 'Thoát tập trung' : 'Tập trung'}</span>
+              </button>
+
               {/* Countdown indicator */}
               <div className="flex items-center gap-2 bg-[#EAEAE3] px-4 py-2 rounded-xl border border-[#E0E0D6]">
                 <Clock className="w-4 h-4 text-[#5A5A40] animate-pulse" />
@@ -1015,6 +1159,14 @@ export default function ToeicPractice() {
                 Nộp bài thi
               </button>
             </div>
+          </div>
+
+          {/* ✅ KEYBOARD SHORTCUTS HINT BAR */}
+          <div className="flex flex-wrap gap-3 items-center px-1 text-[10px] text-[#A3A392] font-mono select-none">
+            <span className="font-semibold text-[#7C7C6B]">Phím tắt:</span>
+            <span className="bg-[#EAEAE3] px-2 py-0.5 rounded border border-[#E0E0D6]">Space = Play/Pause</span>
+            <span className="bg-[#EAEAE3] px-2 py-0.5 rounded border border-[#E0E0D6]">← → = Tua ±5s</span>
+            <span className="bg-[#EAEAE3] px-2 py-0.5 rounded border border-[#E0E0D6]">Ctrl+Enter = Nộp bài</span>
           </div>
 
           <div className="flex flex-col lg:flex-row gap-6 items-start">
@@ -1068,11 +1220,39 @@ export default function ToeicPractice() {
 
                   {/* Main Control Audio Wave Bar */}
                   <div className="flex items-center gap-4">
+                    {/* ✅ Tua lùi 5s */}
+                    <button
+                      onClick={() => {
+                        if (audioRef.current) {
+                          audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5);
+                          setCurrentTime(audioRef.current.currentTime);
+                        }
+                      }}
+                      title="Tua lùi 5 giây (←)"
+                      className="w-8 h-8 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center transition-all cursor-pointer active:scale-90 shrink-0"
+                    >
+                      <SkipBack className="w-4 h-4" />
+                    </button>
+
                     <button 
                       onClick={togglePlayAudio}
                       className="w-10 h-10 bg-white hover:bg-white/90 text-[#5A5A40] rounded-full flex items-center justify-center transition-all cursor-pointer active:scale-90 shadow-sm shrink-0"
                     >
                       {isPlaying ? <Pause className="w-5 h-5 text-[#5A5A40] fill-[#5A5A40]" /> : <Play className="w-5 h-5 text-[#5A5A40] fill-[#5A5A40] translate-x-0.5" />}
+                    </button>
+
+                    {/* ✅ Tua tiến 5s */}
+                    <button
+                      onClick={() => {
+                        if (audioRef.current) {
+                          audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 5);
+                          setCurrentTime(audioRef.current.currentTime);
+                        }
+                      }}
+                      title="Tua tiến 5 giây (→)"
+                      className="w-8 h-8 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center transition-all cursor-pointer active:scale-90 shrink-0"
+                    >
+                      <SkipForward className="w-4 h-4" />
                     </button>
 
                     <div className="flex-grow space-y-1">
@@ -1316,12 +1496,26 @@ export default function ToeicPractice() {
                   })}
                 </div>
 
-                <div className="pt-4 border-t border-[#F5F5F0]">
+                <div className="pt-4 border-t border-[#F5F5F0] space-y-2">
                   <button 
                     onClick={handleSubmitExam}
                     className="w-full py-3 bg-[#5A5A40] hover:bg-[#4A4A35] text-white text-xs font-bold rounded-xl transition-all shadow-sm cursor-pointer text-center"
                   >
                     Nộp bài chấm điểm
+                  </button>
+                  {/* ✅ Nút Reset đáp án */}
+                  <button
+                    onClick={() => {
+                      if (window.confirm('Xóa toàn bộ đáp án đã chọn và làm lại từ đầu?')) {
+                        setUserAnswers({});
+                        setCurrentQuestionIndex(0);
+                        localStorage.removeItem(AUTOSAVE_KEY);
+                      }
+                    }}
+                    className="w-full py-2 flex items-center justify-center gap-1.5 text-[#A3A392] hover:text-[#7C7C6B] text-[11px] font-semibold rounded-xl border border-[#E0E0D6] hover:bg-[#F5F5F0] transition-all cursor-pointer"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    <span>Reset toàn bộ đáp án</span>
                   </button>
                 </div>
               </div>
@@ -1443,7 +1637,7 @@ export default function ToeicPractice() {
 
                     {q.image && (
                       <div className="max-w-[200px] bg-[#F5F5F0] p-1 rounded-lg border border-[#E0E0D6] overflow-hidden">
-                        <img src={q.image} alt="Thumbnail explanation" className="w-[180px] h-auto rounded" referrerPolicy="referrer" />
+                        <img src={q.image} alt="Thumbnail explanation" className="w-[180px] h-auto rounded" referrerPolicy="no-referrer" />
                       </div>
                     )}
 

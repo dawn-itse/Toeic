@@ -156,6 +156,41 @@ const STORAGE_KEY = 'zencards_app_state';
 // The loader will detect a mismatch and re-sync cards from the latest source.
 const CARDS_VERSION = INITIAL_CARDS.length;
 
+/**
+ * Tính toán streak thực tế dựa trên lastActiveDate trong localStorage.
+ * - Nếu hôm nay đã học: giữ nguyên hoặc tăng streak.
+ * - Nếu bỏ 1 ngày (hôm qua): reset về 0.
+ * - Nếu bỏ > 1 ngày: reset về 0.
+ */
+export function calculateUpdatedStreak(savedStreak: number, lastActiveDate: string | undefined): { streak: number; lastActiveDate: string } {
+  const today = new Date().toLocaleDateString('vi-VN');
+
+  if (!lastActiveDate) {
+    // Lần đầu vào app - bắt đầu streak = 1
+    return { streak: 1, lastActiveDate: today };
+  }
+
+  if (lastActiveDate === today) {
+    // Đã vào hôm nay rồi - giữ nguyên streak
+    return { streak: savedStreak, lastActiveDate: today };
+  }
+
+  // Kiểm tra xem lastActiveDate có phải ngày hôm qua không
+  const last = new Date(lastActiveDate.split('/').reverse().join('-')); // dd/mm/yyyy → yyyy-mm-dd
+  const todayDate = new Date();
+  todayDate.setHours(0, 0, 0, 0);
+  last.setHours(0, 0, 0, 0);
+  const diffDays = Math.round((todayDate.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 1) {
+    // Ngày hôm qua - tăng streak lên 1
+    return { streak: savedStreak + 1, lastActiveDate: today };
+  } else {
+    // Bỏ học 2+ ngày - reset streak về 1 (ngày đầu tiên trở lại)
+    return { streak: 1, lastActiveDate: today };
+  }
+}
+
 export function loadState(): LearnState {
   const defaultQuests: DailyQuest[] = [
     {
@@ -208,6 +243,11 @@ export function loadState(): LearnState {
           parsed.quests = defaultQuests;
         }
 
+        // ✅ Tính toán streak thực tế mỗi lần mở app
+        const streakUpdate = calculateUpdatedStreak(parsed.streak || 0, parsed.lastActiveDate);
+        parsed.streak = streakUpdate.streak;
+        parsed.lastActiveDate = streakUpdate.lastActiveDate;
+
         // --- Card sync: merge any new cards from INITIAL_CARDS not yet in storage ---
         // Handles the case where new vocab was added but localStorage holds the old set.
         if (parsed.cards.length < CARDS_VERSION) {
@@ -227,18 +267,19 @@ export function loadState(): LearnState {
   }
 
   // Fallback to initial seed
+  const today = new Date().toLocaleDateString('vi-VN');
   return {
     decks: INITIAL_DECKS,
     cards: INITIAL_CARDS,
-    streak: 14,
-    todayReviewedCount: 85,
+    streak: 1,
+    todayReviewedCount: 0,
     todayGoal: 120,
     xp: 180,
     level: 3,
     hearts: 5,
     unlimitedHearts: false,
     quests: defaultQuests,
-    lastActiveDate: new Date().toLocaleDateString()
+    lastActiveDate: today
   };
 }
 

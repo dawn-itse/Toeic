@@ -6,8 +6,9 @@
 import { useState, useEffect } from 'react';
 import { Card, Deck } from '../types';
 import { getMaskedDisplay, verifyAnswer } from '../data';
-import { ArrowLeft, Lightbulb, Check, ChevronRight, HelpCircle, Volume2 } from 'lucide-react';
+import { ArrowLeft, Lightbulb, Check, ChevronRight, HelpCircle, Volume2, RotateCcw } from 'lucide-react';
 import { speakEnglish } from '../utils/speech';
+import { fireConfettiSmall } from '../utils/confetti';
 
 interface FillInBlanksProps {
   decks: Deck[];
@@ -92,6 +93,9 @@ export default function FillInBlanks({
     if (isCorrect) {
       setFeedback('CORRECT');
       setFeedbackMsg('Chính xác! Bạn được cộng +10 XP đóng góp vào nhiệm vụ hằng ngày hệt như Duolingo. 🎉');
+      
+      // 🎉 Hiệu ứng ăn mừng pháo hoa nhẹ nhàng
+      fireConfettiSmall();
       
       // Mark card status as 'ĐÃ THUỘC'
       onUpdateCardStatus(currentCard.id, 'ĐÃ THUỘC');
@@ -265,7 +269,7 @@ export default function FillInBlanks({
             </div>
 
             {/* Hint & Verification controls */}
-            <div className="flex gap-4 select-none">
+            <div className="flex gap-4 select-none flex-wrap justify-center">
               <button
                 onClick={() => speakEnglish(currentCard.front)}
                 className="flex items-center gap-1.5 text-xs text-[#5A5A40] font-sans font-semibold px-4 py-2.5 border border-[#5A5A40] rounded-xl hover:bg-[#E8E8E0]/40 transition-colors cursor-pointer active:scale-95"
@@ -288,6 +292,21 @@ export default function FillInBlanks({
                 className="bg-[#5A5A40] text-white font-sans font-semibold px-6 py-2.5 rounded-xl hover:bg-[#4A4A35] transition-all cursor-pointer active:scale-95 text-xs"
               >
                 Kiểm tra
+              </button>
+
+              {/* Nút Reset nhỏ gọn, tinh tế */}
+              <button
+                onClick={() => {
+                  setGuess('');
+                  setHintLettersExposed(0);
+                  setFeedback('IDLE');
+                  setFeedbackMsg('');
+                }}
+                title="Xóa câu trả lời và thử lại từ đầu"
+                className="flex items-center gap-1 text-xs text-[#A3A392] font-sans font-medium px-3 py-2.5 border border-[#E0E0D6] rounded-xl hover:bg-[#F5F5F0] hover:text-[#7C7C6B] hover:border-[#C8C8BE] transition-all cursor-pointer active:scale-95"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Reset</span>
               </button>
 
               {feedback === 'CORRECT' && !autoAdvance && (
