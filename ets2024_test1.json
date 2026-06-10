@@ -1,0 +1,86 @@
+{
+  "testId": "ets-2024-test-01",
+  "name": "ETS 2024 LC & RC - Test 01",
+  "description": "Đề thi thử TOEIC chuẩn cấu trúc ETS 2024 đầy đủ trọn bộ hai kỹ năng Nghe và Đọc kèm giải thích ngữ pháp và dịch nghĩa chi tiết.",
+  "durationMinutes": 120,
+  "totalQuestions": 200,
+  "audioUrl": "/Test_01.mp3",
+  "timesTaken": 0,
+  "questions": [
+    {
+      "id": 1,
+      "number": 1,
+      "part": 1,
+      "audioStart": 12,
+      "image": "/imgs/ets2024_p1_1.png",
+      "questionText": "Look at the picture marked number 1 in your test book.",
+      "options": [
+        { "label": "A", "text": "He is operating a piece of heavy machinery." },
+        { "label": "B", "text": "He is wearing a pair of protective gloves." },
+        { "label": "C", "text": "He is adjusting a safety helmet." },
+        { "label": "D", "text": "He is carrying some wooden planks." }
+      ],
+      "correctAnswer": "B",
+      "explanation": "▶ DỊCH NGHĨA:\n- (A) Anh ấy đang vận hành một thiết bị máy móc hạng nặng.\n- (B) Anh ấy đang đeo một đôi găng tay bảo hộ.\n- (C) Anh ấy đang điều chỉnh mũ bảo hiểm bảo hộ.\n- (D) Anh ấy đang mang vác một vài tấm ván gỗ.\n\n▶ PHÂN TÍCH CHI TIẾT:\n- Quan sát bức tranh tả người, chúng ta thấy người đàn ông đang mặc đồ bảo hộ lao động và đeo găng tay rất rõ nét (protective gloves) khi đang làm việc.\n- Động cơ hành động ở câu (A) 'operating heavy machinery' sai vì anh ấy không đứng vận hành trực tiếp máy lớn nào mà chỉ đứng gần.\n- Câu (C) 'adjusting' sai vì anh ấy không có hành động chạm tay lên mũ để điều chỉnh, mũ đã được đội ngay ngắn.\n- Câu (D) 'carrying wooden planks' sai vì không có tấm ván gỗ nào được bê vác trong khung hình.\n=> Đáp án chính xác là B."
+    },
+    {
+      "id": 7,
+      "number": 7,
+      "part": 2,
+      "audioStart": 120,
+      "questionText": "Listen to the question and select the best response: 'Who is responsible for organizing the retirement party?'",
+      "options": [
+        { "label": "A", "text": "At the grand ballroom down the street." },
+        { "label": "B", "text": "Mr. Harrison from Human Resources." },
+        { "label": "C", "text": "Yes, I am planning to retire next year." }
+      ],
+      "correctAnswer": "B",
+      "explanation": "▶ DỊCH NGHĨA:\n- Câu hỏi: Who is responsible for organizing the retirement party? (Ai là người chịu trách nhiệm tổ chức bữa tiệc nghỉ hưu?)\n- (A) At the grand ballroom down the street. (Tại phòng khánh tiết lớn ở cuối phố.)\n- (B) Mr. Harrison from Human Resources. (Ông Harrison đến từ Ban Nhân sự.)\n- (C) Yes, I am planning to retire next year. (Vâng, tôi đang lên kế hoạch nghỉ hưu vào năm tới.)\n\n▶ PHÂN TÍCH CHI TIẾT:\n- Câu hỏi bắt đầu bằng cụm nghi vấn từ 'Who' (Ai) -> Chúng ta cần tìm câu trả lời hướng đến một người hoặc một phòng ban đảm nhiệm.\n- Phương án (B) 'Mr. Harrison from Human Resources' chỉ đích danh một nhân sự cụ thể chịu trách nhiệm, đây là phản hồi trực tiếp và chính xác nhất cho câu hỏi.\n- Loại (A) vì đây là câu trả lời chỉ nơi chốn (địa điểm) cho câu hỏi 'Where'.\n- Loại (C) vì câu hỏi 'Who' (thông tin cụ thể) không thể trả lời bằng Yes/No."
+    },
+    {
+      "id": 32,
+      "number": 32,
+      "part": 3,
+      "audioStart": 340,
+      "passageText": "Woman: Hi, Peter. Have you received the shipment of promotional pamphlets for the upcoming real estate expo? We need to verify if the contact info on the front page is printed correctly before we pack them.\n\nMan: Yes, I checked them this morning. Unfortunately, the phone number listed has a typo - it ends in 45 instead of 54.\n\nWoman: Oh no! That's a critical error since clients won't be able to reach us. I'll call the printing house right now to ask for an urgent reprint of 500 copies.",
+      "questionText": "What problem does the man bring up?",
+      "options": [
+        { "label": "A", "text": "The delivery address was incorrect." },
+        { "label": "B", "text": "The shipment of goods was delayed." },
+        { "label": "C", "text": "A phone number on a pamphlet is misprinted." },
+        { "label": "D", "text": "The total printing cost exceeded the budget." }
+      ],
+      "correctAnswer": "C",
+      "explanation": "▶ DỊCH NGHĨA HỘI THOẠI:\n- Nữ: Chào Peter. Anh đã nhận được lô hàng tờ gấp quảng cáo cho hội chợ triển lãm bất động sản sắp tới chưa? Chúng ta cần xác minh xem thông tin liên hệ ở trang đầu có được in đúng không trước khi đóng gói.\n- Nam: Rồi, tôi đã kiểm tra sáng nay. Thật không may, số điện thoại được liệt kê bị lỗi đánh máy - nó kết thúc bằng 45 thay vì 54.\n- Nữ: Ôi không! Đó là một lỗi nghiêm trọng vì khách hàng sẽ không thể liên lạc được với chúng ta. Tôi sẽ gọi cho nhà in ngay bây giờ để yêu cầu in lại khẩn cấp 500 bản.\n\n▶ PHÂN TÍCH CHI TIẾT CÂU HỎI:\n- Câu hỏi hỏi về vấn đề người đàn ông nêu ra ('What problem does the man bring up?').\n- Người đàn ông nói: 'Unfortunately, the phone number listed has a typo...' (số điện thoại có lỗi đánh máy / viết sai).\n- Do đó, phương án (C) 'A phone number on a pamphlet is misprinted' (In sai số điện thoại trên tờ gấp quảng cáo) phản ánh chính xác nhất ý của người đàn ông."
+    },
+    {
+      "id": 101,
+      "number": 101,
+      "part": 5,
+      "questionText": "The marketing director decided to launch the campaign earlier ________ anticipated due to high consumer demand.",
+      "options": [
+        { "label": "A", "text": "than" },
+        { "label": "B", "text": "as" },
+        { "label": "C", "text": "from" },
+        { "label": "D", "text": "then" }
+      ],
+      "correctAnswer": "A",
+      "explanation": "▶ DỊCH NGHĨA:\n- Giám đốc tiếp thị đã quyết định khởi chạy chiến dịch sớm hơn dự kiến do nhu cầu cao từ người tiêu dùng.\n\n▶ PHÂN TÍCH NGỮ PHÁP CHI TIẾT:\n- Nhận diện dấu hiệu so sánh hơn thông qua trạng từ viết ở dạng so sánh hơn 'earlier' (sớm hơn) ở vế trước.\n- Cấu trúc so sánh hơn chuẩn: [S + V + Adj-er/More Adj + THAN...].\n- Do đó, chúng ta cần liên từ 'than' điền vào chỗ trống để tạo cụm trạng ngữ chuẩn 'earlier than anticipated' (sớm hơn dự kiến).\n- Loại (B) 'as' vì dùng trong cụm so sánh bằng (as... as).\n- Loại (C) 'from' không đi kèm so sánh hơn.\n- Loại (D) 'then' (sau đó) là trạng từ chỉ trình tự thời gian, phát âm gần giống 'than' nhưng ý nghĩa và ngữ pháp hoàn toàn khác (đây là bẫy ETS đánh lừa học viên phát âm sai/nhìn lướt rất phổ biến)."
+    },
+    {
+      "id": 147,
+      "number": 147,
+      "part": 7,
+      "passageText": "TECHNICAL MEMORANDUM\nTo: All Engineering Staff\nFrom: Dave Vance, IT Infrastructure Director\nSubject: Scheduled Core Database Upgrade\nDate: October 12\n\nPlease be informed that the IT department will perform a major system database migration on Saturday, October 15, starting from 8:00 AM to 4:00 PM. During this 8-hour window, access to the primary internal server, project archives, and client databases will be completely offline.\n\nWe advise all teams to download any critical project documents and schematic diagrams to their local workstations prior to Friday evening. Normal database operations are expected to resume by Sunday morning, October 16. Thank you for your cooperation and understanding as we work to improve our server capacity and security protocols.\n\nDave Vance\nIT Director",
+      "questionText": "What are employees instructed to do before Friday evening?",
+      "options": [
+        { "label": "A", "text": "Submit their weekly task reports." },
+        { "label": "B", "text": "Download critical work documents locally." },
+        { "label": "C", "text": "Attend a mandatory system training session." },
+        { "label": "D", "text": "Back up their client contact folders." }
+      ],
+      "correctAnswer": "B",
+      "explanation": "▶ DỊCH NGHĨA VĂN BẢN ĐỌC HIỂU:\n- BẢN GHI NHỚ KỸ THUẬT\n- Gửi tới: Toàn thể nhân viên kỹ thuật\n- Người gửi: Dave Vance, Giám đốc Cơ sở hạ tầng CNTT\n- Ngày: 12 tháng 10\n- Xin vui lòng thông báo rằng bộ phận CNTT sẽ thực hiện di chuyển cơ sở dữ liệu hệ thống lớn vào thứ Bảy ngày 15 tháng 10, bắt đầu từ 8:00 giờ sáng đến 4:00 giờ chiều. Trong thời gian 8 tiếng này, quyền truy cập vào máy chủ nội bộ chính, kho lưu trữ dự án, và database khách hàng sẽ bị ngoại tuyến hoàn toàn.\n- Chúng tôi khuyên tất cả các đội nhóm hãy tải xuống bất kỳ tài liệu dự án quan trọng nào và sơ đồ kiến trúc về máy trạm cá nhân của họ trước tối thứ Sáu.\n- Hoạt động cơ sở dữ liệu bình thường dự kiến sẽ quay trở lại trước sáng Chủ nhật ngày 16 tháng 10. Cảm ơn sự hợp tác của các bạn.\n\n▶ PHÂN TÍCH CHI TIẾT CÂU HỎI:\n- Câu hỏi hỏi: Nhân viên được hướng dẫn làm gì trước chiều tối thứ Sáu? ('What are employees instructed to do before Friday evening?')\n- Đoạn văn nêu rõ: 'We advise all teams to download any critical project documents... to their local workstations prior to Friday evening.'\n- Paraphrasing trong đáp án:\n  + 'download ... to their local workstations' (tải về máy cá nhân) đồng nghĩa hoàn toàn với 'Download critical work documents locally' (Phương án B).\n- Do đó, phương án đúng là B."
+    }
+  ]
+}

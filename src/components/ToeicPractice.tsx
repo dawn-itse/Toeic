@@ -27,7 +27,8 @@ import {
   Minimize,
   SkipBack,
   SkipForward,
-  RefreshCw
+  RefreshCw,
+  LayoutGrid
 } from 'lucide-react';
 import { fireConfettiBig } from '../utils/confetti';
 
@@ -54,6 +55,7 @@ interface ToeicTest {
   totalQuestions: number;
   questions: ToeicQuestion[];
   timesTaken: number;
+  audioUrl?: string;
 }
 
 interface TestAttempt {
@@ -156,6 +158,8 @@ export default function ToeicPractice() {
     totalListeningInTest: number;
     totalReadingInTest: number;
   } | null>(null);
+
+  const [isReviewMode, setIsReviewMode] = useState<boolean>(false);
 
   // Load history on mount
   useEffect(() => {
@@ -273,12 +277,381 @@ export default function ToeicPractice() {
   // Actual TOEIC Practice Tests Database (digitized directly based on the user's PDF and requested layout structure)
   const toeicTests: ToeicTest[] = [
     {
+      id: 'ets-2024-test-01',
+      name: 'ETS 2024 - TEST 1',
+      description: 'Đề thi chuẩn hóa ETS 2024 đầy đủ trọn bộ hai kỹ năng Nghe và Đọc kèm giải thích chi tiết, dịch nghĩa, cấu trúc ngữ pháp và từ vựng mới trích từ Ebook.',
+      durationMinutes: 120,
+      totalQuestions: 200,
+      timesTaken: 25,
+      audioUrl: '/Test_01.mp3',
+      questions: [
+        {
+          id: 1,
+          number: 1,
+          part: 1,
+          audioStart: 12,
+          image: '/imgs/ETS/p1.png',
+          questionText: 'Mời bạn nghe và chọn mô tả đúng nhất cho bức tranh số 1 (Picnic table / Woman eating).',
+          options: [
+            { label: 'A', text: 'She is sitting at a picnic table outdoors.' },
+            { label: 'B', text: 'She is eating a sandwich inside a truck.' },
+            { label: 'C', text: 'She is cleaning a wooden bench in the park.' },
+            { label: 'D', text: 'She is throwing away a plastic cup.' }
+          ],
+          correctAnswer: 'A',
+          explanation: `▶ DỊCH NGHĨA PHƯƠNG ÁN:
+- A. Cô ấy đang ngồi ở bàn dã ngoại ngoài trời.
+- B. Cô ấy đang ăn bánh mì xăng-uých bên trong xe tải.
+- C. Cô ấy đang lau chùi một chiếc ghế gỗ ở công viên.
+- D. Cô ấy đang vứt bỏ một chiếc cốc nhựa.
+
+▶ PHÂN TÍCH LOẠI TRỪ CHI TIẾT:
+- Câu A chính xác: Diễn tả đúng hành vi của người phụ nữ trong ảnh đang ngồi ăn tại một chiếc bàn dã ngoại (picnic table).
+- Câu B sai (Bẫy từ "truck"): Trong hình có xe tải cắm trại đỗ xa xa, nhưng cô ấy không ăn bên trong chiếc xe tải đó.
+- Câu C sai (Bẫy từ "bench"): Trong tranh có hình ảnh chiếc ghế băng dài nhưng cô ấy đang ngồi ăn, không có hành vi "lau chùi" (cleaning).
+- Câu D sai: Không có hành động vứt rác (throwing away) diễn ra.`
+        },
+        {
+          id: 2,
+          number: 2,
+          part: 1,
+          audioStart: 45,
+          image: '/imgs/ETS/p2.png',
+          questionText: 'Mời bạn nghe và chọn mô tả đúng nhất cho bức tranh số 2 (Man standing near car in snow).',
+          options: [
+            { label: 'A', text: 'He is brushing snow off the roof of a car.' },
+            { label: 'B', text: 'He is standing next to an open passenger door.' },
+            { label: 'C', text: 'He is shoveling snow from a concrete walkway.' },
+            { label: 'D', text: 'He is running through the deep snow.' }
+          ],
+          correctAnswer: 'B',
+          explanation: `▶ DỊCH NGHĨA PHƯƠNG ÁN:
+- A. Anh ấy đang phủi tuyết khỏi nóc xe ô tô.
+- B. Anh ấy đang đứng cạnh một cánh cửa xe bên hành khách đang mở.
+- C. Anh ấy đang xúc tuyết khỏi một lối đi lát bê tông.
+- D. Anh ấy đang chạy qua lớp tuyết sâu.
+
+▶ PHÂN TÍCH LOẠI TRỪ CHI TIẾT:
+- Câu B chính xác: Mô tả người đàn ông đứng gần cánh cửa ô tô đang mở giữa trời tuyết.
+- Câu A sai (Bẫy hành động): Mặc dù trên nóc xe có tuyết phủ nhưng anh ấy không thực hiện hành động phủi tuyết (brushing).
+- Câu C sai: Không có cảnh tượng xúc tuyết (shoveling).
+- Câu D sai: Anh ấy đứng tại chỗ, không chạy bộ (running).`
+        },
+        {
+          id: 3,
+          number: 3,
+          part: 1,
+          audioStart: 90,
+          image: '/imgs/ETS/p3.png',
+          questionText: 'Mời bạn nghe và chọn mô tả đúng nhất cho bức tranh số 3 (Gallery showing).',
+          options: [
+            { label: 'A', text: 'A worker is currently hanging some artwork on the wall.' },
+            { label: 'B', text: 'A man is sitting alone on a sofa reading a book.' },
+            { label: 'C', text: 'An employee is rearranging the cushions on a couch.' },
+            { label: 'D', text: 'An artist is painting a canvas inside a studio.' }
+          ],
+          correctAnswer: 'B',
+          explanation: `▶ DỊCH NGHĨA PHƯƠNG ÁN:
+- A. Một công nhân đang treo một số tác phẩm nghệ thuật lên tường.
+- B. Một người đàn ông đang ngồi một mình trên ghế sofa đọc sách.
+- C. Một nhân viên đang sắp xếp lại những chiếc đệm trên ghế sofa.
+- D. Một họa sĩ đang vẽ một bức tranh trong studio.
+
+▶ PHÂN TÍCH LOẠI TRỪ CHI TIẾT:
+- Câu B chính xác: Có một người đàn ông ngồi ở ghế sofa trung tâm chăm chú đọc một cuốn sách.
+- Câu A sai (Bẫy từ "hanging"): Các tác phẩm hội họa đã được treo hoàn thiện từ trước, không có hành động treo tranh đang diễn ra tại thời điểm đó.
+- Câu C sai: Không có hành động sắp xếp đệm (rearranging cushions).
+- Câu D sai: Không có hoạt động sáng tác tranh trực tiếp (painting a canvas) tại phòng triển lãm.`
+        },
+        {
+          id: 4,
+          number: 4,
+          part: 1,
+          audioStart: 135,
+          image: '/imgs/ETS/p4.png',
+          questionText: 'Mời bạn nghe và chọn mô tả đúng nhất cho bức tranh số 4 (Clothing racks in tent market).',
+          options: [
+            { label: 'A', text: 'Several shoppers are entering a parking garage.' },
+            { label: 'B', text: 'Metal clothes hangers are scattered on the ground.' },
+            { label: 'C', text: 'Empty clothing racks are placed next to a building.' },
+            { label: 'D', text: 'Some garments are hanging on metal racks.' }
+          ],
+          correctAnswer: 'D',
+          explanation: `▶ DỊCH NGHĨA PHƯƠNG ÁN:
+- A. Một vài người mua sắm đang tiến vào bãi đỗ xe.
+- B. Những chiếc móc quần áo bằng kim loại nằm rải rác trên nền đất.
+- C. Những chiếc kệ trống không có quần áo được đặt kế bên một tòa nhà.
+- D. Một số mặt hàng may mặc (garments) đang được treo trên kệ kim loại.
+
+▶ PHÂN TÍCH LOẠI TRỪ CHI TIẾT:
+- Câu D chính xác: Quần áo đang được treo ngay ngắn trên các thanh treo kim loại dưới gian lều.
+- Câu A sai: Không có bãi đỗ xe (parking garage) hay hành vi đi vào nào diễn ra.
+- Câu B sai (Bẫy từ "móc treo"): Không có móc treo rải rác ngoài đất (scattered on ground).
+- Câu C sai: Không có chiếc kệ trống (empty racks) hay tòa nhà lớn nào kế bên.`
+        },
+        {
+          id: 5,
+          number: 5,
+          part: 1,
+          audioStart: 180,
+          image: '/imgs/ETS/p5.png',
+          questionText: 'Mời bạn nghe và chọn mô tả đúng nhất cho bức tranh số 5 (Lobby entrance/office with computers).',
+          options: [
+            { label: 'A', text: 'Potted plants are suspended from a ceiling.' },
+            { label: 'B', text: 'Some folding chairs have been stacked in a corner.' },
+            { label: 'C', text: 'A printer is positioned on a wooden desk.' },
+            { label: 'D', text: 'A patterned rug is being rolled up near an entrance.' }
+          ],
+          correctAnswer: 'C',
+          explanation: `▶ DỊCH NGHĨA PHƯƠNG ÁN:
+- A. Các chậu cây đang được treo lơ lửng trên trần nhà.
+- B. Một số ghế gập đã được xếp chồng lên nhau ở góc phòng.
+- C. Một chiếc máy in (printer) được đặt trên mặt bàn gỗ.
+- D. Một tấm thảm có hoa văn đang được cuộn lại gần lối ra vào.
+
+▶ PHÂN TÍCH LOẠI TRỪ CHI TIẾT:
+- Câu C chính xác: Có một chiếc máy in lớn màu trắng đặt rõ ràng trên mặt bàn làm việc bằng gỗ ở trung tâm.
+- Câu A sai (Bẫy từ "potted plants"): Cây được trồng trong bệ sứ to dưới đất, không phải treo lên trần (suspended from ceiling).
+- Câu B sai (Bẫy từ "chairs"): Ghế được bài trí thưa thớt xung quanh sảnh, không xếp chồng lên nhau (stacked in a corner).
+- Câu D sai: Thảm trải sàn được trải phẳng phiu, không có cảnh cuộn thảm lại.`
+        },
+        {
+          id: 6,
+          number: 6,
+          part: 1,
+          audioStart: 225,
+          image: '/imgs/ETS/p6.png',
+          questionText: 'Mời bạn nghe và chọn mô tả đúng nhất cho bức tranh số 6 (Men working on ceiling fixture).',
+          options: [
+            { label: 'A', text: 'One of the men is sweeping a concrete patio.' },
+            { label: 'B', text: 'One of the men is replacing some damaged flooring.' },
+            { label: 'C', text: 'One of the men is reaching up toward a ceiling fixture.' },
+            { label: 'D', text: 'A light fixture has been left on the ground.' }
+          ],
+          correctAnswer: 'C',
+          explanation: `▶ DỊCH NGHĨA PHƯƠNG ÁN:
+- A. Một trong những người đàn ông đang quét sân hiên lát bê tông.
+- B. Một trong những người đàn ông đang thay thế sàn nhà bị hỏng.
+- C. Một trong những người đàn ông đang với tay chạm lên chiếc đèn gắn trần.
+- D. Một chiếc đèn trang trí đã bị bỏ lại trên mặt đất.
+
+▶ PHÂN TÍCH LOẠI TRỪ CHI TIẾT:
+- Câu C chính xác: Người đàn ông cao hơn đang giơ tay cao lên trần chạm vào chiếc đèn cố định gắn trên trần nhà (reaching up toward a ceiling fixture).
+- Câu A sai (Bẫy từ "quét"): Anh ấy quét dọn trong căn phòng kín, không phải ngoài hiên (patio).
+- Câu B sai: Không có hoạt động sửa gạch sàn (replacing flooring).
+- Câu D sai: Đèn chắc chắn gắn tinh tế trên trần, không bị vứt rác dưới sàn nhà.`
+        },
+        {
+          id: 7,
+          number: 7,
+          part: 2,
+          audioStart: 300,
+          questionText: 'Nghe câu hỏi hoặc phát biểu và chọn phản hồi phù hợp nhất: "Who is responsible for organizing the retirement party?"',
+          options: [
+            { label: 'A', text: 'At the grand ballroom down the street.' },
+            { label: 'B', text: 'Mr. Harrison from the HR department.' },
+            { label: 'C', text: 'Yes, I am planning to retire next year.' }
+          ],
+          correctAnswer: 'B',
+          explanation: `▶ DỊCH NGHĨA CÂU HỎI & ĐÁP ÁN:
+- Câu hỏi: "Ai chịu trách nhiệm tổ chức bữa tiệc nghỉ hưu?"
+- A. "Tại phòng dạ hội lớn dưới phố."
+- B. "Ông Harrison từ phòng Nhân sự."
+- C. "Vâng, tôi dự kiến nghỉ hưu vào năm sau."
+
+▶ PHÂN TÍCH LỰA CHỌN:
+- Câu hỏi thuộc dạng "Who" (Ai), yêu cầu câu trả lời chỉ tên người hoặc bộ phận chịu trách nhiệm. Phương án B chỉ đích danh "Mr. Harrison..." nên hoàn toàn chính xác.
+- Phương án A trả lời cho câu hỏi địa điểm "Where".
+- Phương án C là câu trả lời Yes/No, không phù hợp cho câu hỏi chứa từ để hỏi Wh-question.`
+        },
+        {
+          id: 32,
+          number: 32,
+          part: 3,
+          audioStart: 900,
+          passageText: "[Đoạn hội thoại - Dialogue]\nWoman: Hi John, have you seen the agenda for our upcoming corporate team retreat? It seems like they want us to present our market expansion results already on the first afternoon.\nMan: Yes, I noticed that. I am actually quite concerned because our graphic designs department hasn't finished the slides yet. They said they need two more days.\nWoman: In that case, we should check with the organizing committee. Perhaps they can shift our session to the second morning so we have enough time to finalize the presentation.",
+          questionText: 'What are the speakers discussing?',
+          options: [
+            { label: 'A', text: 'An upcoming presentation scheduled for a team retreat.' },
+            { label: 'B', text: 'A change in corporate health insurance guidelines.' },
+            { label: 'C', text: 'Hiring new graphic designers for the campaign.' },
+            { label: 'D', text: 'The budget estimates for market expansion.' }
+          ],
+          correctAnswer: 'A',
+          explanation: `▶ DỊCH NGHĨA ĐOẠN HỘI THOẠI & PHƯƠNG ÁN:
+- Nữ: Chào John, anh đã xem lịch trình buổi dã ngoại toàn công ty sắp tới chưa? Có vẻ họ muốn chúng ta thuyết trình về kết quả mở rộng thị trường ngay chiều ngày đầu tiên rồi.
+- Nam: Ờ, tôi thấy rồi. Thực sự tôi đang lo lắng vì bộ phận thiết kế đồ họa vẫn chưa vẽ xong các trang slide thuyết trình. Họ nói họ cần thêm 2 ngày nữa.
+- Nữ: Trong trường hợp vậy, chúng ta nên kiến nghị lên ban tổ chức xem nào. Có lẽ họ có thể dời buổi phát biểu của chúng ta sang sáng ngày thứ hai để có đủ thời gian hoàn thiện bài trình bày.
+
+▶ PHÂN TÍCH VÙNG THÔNG TIN CHỨA ĐÁP ÁN:
+- Độc thoại đầu tiên của người phụ nữ nhấn mạnh trực tiếp đến lịch trình thuyết trình trong sự kiện dã ngoại doanh nghiệp ("agenda for our upcoming corporate team retreat... present our market expansion results").
+-> Chọn A là phương án đúng nhất.`
+        },
+        {
+          id: 33,
+          number: 33,
+          part: 3,
+          audioStart: 900,
+          questionText: 'What problem does the woman mention?',
+          options: [
+            { label: 'A', text: 'The conference room has been double-booked.' },
+            { label: 'B', text: 'The market results data are completely missing.' },
+            { label: 'C', text: 'The slide graphics are not complete yet.' },
+            { label: 'D', text: 'The organizing director is absent.' }
+          ],
+          correctAnswer: 'C',
+          explanation: `▶ CHI TIẾT ĐỊNH VỊ ĐÁP ÁN:
+- Người đàn ông giải thích trực tiếp về khó khăn đang gặp phải: "our graphic designs department hasn't finished the slides yet" (Bộ phận thiết kế đồ họa vẫn chưa làm xong các slide).
+- Khái niệm "not finished the slides yet" tương ứng hoàn hảo với diễn đạt "The slide graphics are not complete yet" trong câu C.
+-> Chọn C.`
+        },
+        {
+          id: 34,
+          number: 34,
+          part: 3,
+          audioStart: 900,
+          questionText: 'What does the woman suggest doing?',
+          options: [
+            { label: 'A', text: 'Postponing the team retreat date.' },
+            { label: 'B', text: 'Contacting the organizing committee to request a schedule shift.' },
+            { label: 'C', text: 'Designing the slide presentation on her own.' },
+            { label: 'D', text: 'Canceling her travel seats.' }
+          ],
+          correctAnswer: 'B',
+          explanation: `▶ CHI TIẾT ĐỊNH VỊ ĐÁP ÁN:
+- Lời đề nghị cuối của người phụ nữ: "In that case, we should check with the organizing committee. Perhaps they can shift our session to the second morning..." (Trong trường hợp đó, chúng ta nên liên hệ với BTC. Có lẽ họ dời lịch thuyết trình sang sáng ngày sau).
+- Như vậy cô đề xuất liên hệ ban tổ chức để dời giờ biểu diễn. Điều này tương ứng hoàn hảo với B.`
+        },
+        {
+          id: 101,
+          number: 101,
+          part: 5,
+          questionText: 'Former Sendai Company CEO Ken Nakata spoke about ________ career experiences at yesterday\'s gala.',
+          options: [
+            { label: 'A', text: 'he' },
+            { label: 'B', text: 'his' },
+            { label: 'C', text: 'him' },
+            { label: 'D', text: 'himself' }
+          ],
+          correctAnswer: 'B',
+          explanation: `▶ DỊCH NGHĨA CÂU:
+"Cựu giám đốc điều hành công ty Sendai Ken Nakata đã kể về những kinh nghiệm nghề nghiệp của mình tại buổi gala tối qua."
+
+▶ PHÂN TÍCH NGỮ PHÁP CHI TIẾT:
+- Dạng bài tìm từ loại điền vào chỗ trống.
+- Đứng ngay sau chỗ trống là cụm danh từ "career experiences" (các kinh nghiệm nghề nghiệp).
+- Để bổ nghĩa cho danh từ này thể hiện quyền sở hữu, chúng ta cần một TÍNH TỪ SỞ HỮU (Possessive Adjective).
+- Trong 4 phương án đề ra:
+  + (A) he: Đại từ nhân xưng chủ ngữ (Subject Pronoun).
+  + (B) his: Tính từ sở hữu (Possessive Adjective).
+  + (C) him: Đại từ làm tân ngữ (Object Pronoun).
+  + (D) himself: Đại từ phản thân (Reflexive Pronoun).
+-> Do đó, chọn (B) "his" là hoàn toàn chuẩn xác nhất.
+
+▶ TỪ VỰNG MỚI CẦN LƯU Ý:
+- former (adj): cựu, trước đây
+- CEO (n): giám đốc điều hành
+- career (n): sự nghiệp, nghề nghiệp
+- experience (n): kinh nghiệm, trải nghiệm`
+        },
+        {
+          id: 102,
+          number: 102,
+          part: 5,
+          questionText: 'Passengers who will be taking a ________ domestic flight should go to Terminal A.',
+          options: [
+            { label: 'A', text: 'connectivity' },
+            { label: 'B', text: 'connects' },
+            { label: 'C', text: 'connect' },
+            { label: 'D', text: 'connecting' }
+          ],
+          correctAnswer: 'D',
+          explanation: `▶ DỊCH NGHĨA CÂU:
+"Những hành khách đi chuyến bay nội địa nối chuyến nên di chuyển đến Nhà ga A."
+
+▶ PHÂN TÍCH NGỮ PHÁP CHI TIẾT:
+- Cụm từ ghép thông dụng trong ngành hàng không: "connecting flight" nghĩa là "chuyến bay trung chuyển / chuyến bay nối chuyến".
+- Ở đây "connecting" đóng vai trò như một phân từ tính từ đứng bổ nghĩa trực tiếp cho danh từ "flight".
+- Lựa chọn phân tích:
+  + (A) connectivity (n): tính kết nối, kết nối mạng.
+  + (B) connects (v): động từ chia số ít.
+  + (C) connect (v): động từ nguyên mẫu.
+  + (D) connecting (adj/participle): nối chuyến, liên kết.
+-> Chọn (D).`
+        },
+        {
+          id: 103,
+          number: 103,
+          part: 5,
+          questionText: 'Fresh and ________ apple-cider donuts are available at Oakcrest Orchard\'s retail shop for £6 per dozen.',
+          options: [
+            { label: 'A', text: 'eaten' },
+            { label: 'B', text: 'open' },
+            { label: 'C', text: 'tasty' },
+            { label: 'D', text: 'free' }
+          ],
+          correctAnswer: 'C',
+          explanation: `▶ DỊCH NGHĨA CÂU:
+"Những chiếc bánh doughnut vị táo tươi ngon có bán tại cửa hàng bán lẻ Oakcrest Orchard với giá 6 bảng mỗi một tá (12 chiếc)."
+
+▶ PHÂN TÍCH TỪ VỰNG:
+- Cấu trúc nối bằng liên từ song hành "Fresh and [adj]" nhằm tìm một tính từ mô tả tích cực cho chất lượng của bánh doughnut táo.
+- Nghĩa các từ lựa chọn:
+  + (A) eaten: đã bị ăn.
+  + (B) open: mở cửa.
+  + (C) tasty (adj): ngon miệng, đậm vị.
+  + (D) free: miễn phí.
+-> Đáp án (C) "tasty" là lo-gic nhất để tăng tính quảng cáo hấp dẫn cho đồ ăn.
+
+▶ TỪ VỰNG MỚI CẦN LƯU Ý:
+- apple-cider (n): nước ép táo lên men nhẹ, rượu táo
+- orchard (n): vườn cây ăn quả
+- retail (adj/n): bán lẻ
+- dozen (n): một tá (12 chiếc)`
+        },
+        {
+          id: 147,
+          number: 147,
+          part: 7,
+          passageText: `TECHNICAL MEMORANDUM\nTo: All Engineering Staff\nFrom: Dave Vance, IT Infrastructure Director\nDate: October 14\nSubject: Scheduled Database Server Maintenance and Offline Period\n\nPlease be advised that our primary database server cluster (DB-PROD-01) will be undergoing a major hardware migration and index optimization update starting this Friday, October 16 at 8:00 PM Eastern Time. The upgrade process is expected to last for approximately 14 hours, concluding at 10:00 AM on Saturday, October 17.\n\nDuring this scheduled upgrade, all write access and complex SQL schema queries on the production databases will be completely unavailable. Engineers who are working overtime on Friday evening are strongly encouraged to download any critical reference schemas and locally cache customer requirement specifications in advance. This ensures work continuity without querying the live master server. Following the maintenance window, full master capabilities will resume automatically.\n\nYour patience and support is appreciated as we harden our cloud databases.\nSincerely,\nDave Vance`,
+          questionText: 'What is the main purpose of the memorandum?',
+          options: [
+            { label: 'A', text: 'To announce the recruitment of new database engineers.' },
+            { label: 'B', text: 'To report on quarterly hardware sales results.' },
+            { label: 'C', text: 'To notify employees about a scheduled database maintenance period.' },
+            { label: 'D', text: 'To introduce a new cloud software training program.' }
+          ],
+          correctAnswer: 'C',
+          explanation: `▶ DỊCH NGHĨA BẢN THÔNG BÁO KỸ THUẬT & PHƯƠNG ÁN:
+- Toàn bộ nội dung bản thông báo (memorandum) từ IT Director Dave Vance nhằm thông báo về việc thực hiện bảo trì, nâng cấp phần cứng và tối ưu hóa hệ thống máy chủ cơ sở dữ liệu chính (DB-PROD-01) diễn ra từ tối thứ Sáu đến sáng thứ Bảy.
+- Do đó biểu đạt ý C: "To notify employees about a scheduled database maintenance period" (Để thông báo cho nhân viên về khung bảo trì cơ sở dữ liệu đã lên lịch) là tuyệt đối chuẩn xác.`
+        },
+        {
+          id: 148,
+          number: 148,
+          part: 7,
+          questionText: 'According to the text, what are employees working overtime on Friday advised to do?',
+          options: [
+            { label: 'A', text: 'Connect to the redundant live replica backup server.' },
+            { label: 'B', text: 'Download critical reference docs and schema files locally in advance.' },
+            { label: 'C', text: 'Draft a summary email to IT customer support.' },
+            { label: 'D', text: 'Reschedule all customer feedback meetings to Saturday evening.' }
+          ],
+          correctAnswer: 'B',
+          explanation: `▶ ĐỊNH VỊ VÀ PHÂN TÍCH THÔNG TIN:
+- Tại đoạn 2 trong văn bản ghi rõ chỉ dẫn dành cho các kỹ sư làm tăng ca: "Engineers who are working overtime on Friday evening are strongly encouraged to download any critical reference schemas and locally cache customer requirement specifications in advance." (Các kỹ sư làm thêm tối Thứ Sáu được khuyên nên tải trước các tài liệu lược đồ tham chiếu quan trọng và lưu giữ bản sao yêu cầu khách hàng về máy cá nhân cục bộ).
+- Khái niệm "locally cache... in advance" hoàn toàn tương thích với B.`
+        }
+      ]
+    },
+    {
       id: 'toeic-test-02',
       name: 'TOEIC Actual Test 02',
       description: 'Đề thi chuẩn hóa New Economy 1000 chuyên sâu định dạng đề thi thật ETS.',
       durationMinutes: 120,
       totalQuestions: 200,
       timesTaken: 142,
+      audioUrl: '/Test2.mp3',
       questions: [
         // PART 1
         {
@@ -286,7 +659,7 @@ export default function ToeicPractice() {
           number: 1,
           part: 1,
           audioStart: 0, // seconds
-          image: '/imgs/p1.png',
+          image: '/imgs/Test2/p1.png',
           questionText: 'Hãy nghe và chọn mô tả đúng nhất cho bức tranh số 1.',
           options: [
             { label: 'A', text: 'An airplane is taking off from the runway.' },
@@ -302,7 +675,7 @@ export default function ToeicPractice() {
           number: 2,
           part: 1,
           audioStart: 45, // seconds
-          image: '/imgs/p2.png',
+          image: '/imgs/Test2/p2.png',
           questionText: 'Hãy nghe và chọn mô tả đúng nhất cho bức tranh số 2.',
           options: [
             { label: 'A', text: 'The woman is signing a sales contract.' },
@@ -318,7 +691,7 @@ export default function ToeicPractice() {
           number: 3,
           part: 1,
           audioStart: 90, // seconds
-          image: '/imgs/p3.png',
+          image: '/imgs/Test2/p3.png',
           questionText: 'Hãy nghe và chọn mô tả đúng nhất cho bức tranh số 3.',
           options: [
             { label: 'A', text: 'A woman is polishing the windshield of her sedan.' },
@@ -334,7 +707,7 @@ export default function ToeicPractice() {
           number: 4,
           part: 1,
           audioStart: 135,
-          image: '/imgs/p4.png',
+          image: '/imgs/Test2/p4.png',
           questionText: 'Hãy nghe và chọn mô tả đúng nhất cho bức tranh số 4.',
           options: [
             { label: 'A', text: 'Several skiers are riding a cable hoist lift.' },
@@ -350,7 +723,7 @@ export default function ToeicPractice() {
           number: 5,
           part: 1,
           audioStart: 180,
-          image: '/imgs/p5.png',
+          image: '/imgs/Test2/p5.png',
           questionText: 'Hãy nghe và chọn mô tả đúng nhất cho bức tranh số 5.',
           options: [
             { label: 'A', text: 'A businesswoman is presenting charts on a whiteboard.' },
@@ -366,7 +739,7 @@ export default function ToeicPractice() {
           number: 6,
           part: 1,
           audioStart: 225,
-          image: '/imgs/p6.png',
+          image: '/imgs/Test2/p6.png',
           questionText: 'Hãy nghe và chọn mô tả đúng nhất cho bức tranh số 6.',
           options: [
             { label: 'A', text: 'An operator is adjusting a headphone wire.' },
@@ -760,6 +1133,7 @@ export default function ToeicPractice() {
     setActiveTest(test);
     setExamMode(mode);
     setViewMode('exam');
+    setIsReviewMode(false);
 
     // ✅ Thử khôi phục auto-save nếu có
     const restored = tryRestoreAutoSave(test.id);
@@ -1185,7 +1559,7 @@ export default function ToeicPractice() {
                   <audio 
                     id="toeicAudio" 
                     ref={audioRef}
-                    src="Test2.mp3"
+                    src={activeTest?.audioUrl || 'Test2.mp3'}
                     onTimeUpdate={handleAudioTimeUpdate}
                     onLoadedMetadata={handleAudioLoadedMetadata}
                   />
@@ -1195,7 +1569,7 @@ export default function ToeicPractice() {
                       <Volume2 className="w-5 h-5 text-white/80" />
                       <div>
                         <span className="text-[10px] text-white/60 uppercase font-bold tracking-widest">Trình ghi âm phát tập trung</span>
-                        <h4 className="text-xs font-bold font-sans text-white">File Audio đề bài liên tục: Test2.mp3</h4>
+                        <h4 className="text-xs font-bold font-sans text-white">File Audio đề bài liên tục: {activeTest?.audioUrl ? activeTest.audioUrl.replace('/', '') : 'Test2.mp3'}</h4>
                       </div>
                     </div>
 
@@ -1392,33 +1766,79 @@ export default function ToeicPractice() {
                 <div className="grid grid-cols-1 gap-3 pt-2">
                   {currentQuestion.options.map((option) => {
                     const isSelected = userAnswers[currentQuestion.number] === option.label;
+                    const isCorrect = option.label === currentQuestion.correctAnswer;
+                    
+                    let buttonClass = '';
+                    let spanClass = '';
+                    let labelBadge = null;
+
+                    if (isReviewMode) {
+                      if (isCorrect) {
+                        buttonClass = 'bg-[#EBF7EE] border-[#B2E2BD] text-[#1E5E3A]';
+                        spanClass = 'bg-[#2E7D32] text-white';
+                        labelBadge = <span className="ml-auto text-[10px] font-bold uppercase tracking-wider text-[#2E7D32] bg-[#D4EDDA] px-2.5 py-1 rounded-md border border-[#C3E6CB]">Đáp án đúng</span>;
+                      } else if (isSelected) {
+                        buttonClass = 'bg-[#FDF2F2] border-[#F5C2C2] text-[#9c2424]';
+                        spanClass = 'bg-[#C62828] text-white';
+                        labelBadge = <span className="ml-auto text-[10px] font-bold uppercase tracking-wider text-[#C62828] bg-[#FCE8E6] px-2.5 py-1 rounded-md border border-[#F5C6CB]">Bạn chọn</span>;
+                      } else {
+                        buttonClass = 'bg-[#FAFAFA] border-[#E5E5DE] text-[#8C8C7E] opacity-60 cursor-not-allowed';
+                        spanClass = 'bg-[#EAEAE3] text-[#8C8C7E]';
+                      }
+                    } else {
+                      if (isSelected) {
+                        buttonClass = 'bg-[#5A5A40]/10 border-[#5A5A40] shadow-sm';
+                        spanClass = 'bg-[#5A5A40] text-white';
+                      } else {
+                        buttonClass = 'bg-white hover:bg-[#FBFBFA] border-[#E0E0D6] hover:border-[#7C7C6B]/40';
+                        spanClass = 'bg-[#F2F2EB] text-[#7C7C6B]';
+                      }
+                    }
+
                     return (
                       <button
                         key={option.label}
+                        disabled={isReviewMode}
                         onClick={() => handleSelectOption(currentQuestion.number, option.label)}
-                        className={`flex items-center gap-4 p-4 rounded-xl text-left border transition-all cursor-pointer active:scale-98 ${
-                          isSelected
-                            ? 'bg-[#5A5A40]/10 border-[#5A5A40] shadow-sm'
-                            : 'bg-white hover:bg-[#FBFBFA] border-[#E0E0D6] hover:border-[#7C7C6B]/40'
-                        }`}
+                        className={`flex items-center gap-4 p-4 rounded-xl text-left border transition-all cursor-pointer ${buttonClass}`}
                       >
-                        <span className={`w-7 h-7 rounded-lg font-bold flex items-center justify-center text-xs transition-all shrink-0 ${
-                          isSelected
-                            ? 'bg-[#5A5A40] text-white'
-                            : 'bg-[#F2F2EB] text-[#7C7C6B]'
-                        }`}>
+                        <span className={`w-7 h-7 rounded-lg font-bold flex items-center justify-center text-xs transition-all shrink-0 ${spanClass}`}>
                           {option.label}
                         </span>
                         
-                        <span className={`text-[14px] font-medium leading-normal ${
-                          isSelected ? 'text-[#3D3D33] font-semibold' : 'text-[#55554B]'
-                        }`}>
+                        <span className="text-[14px] font-medium leading-normal">
                           {option.text}
                         </span>
+
+                        {labelBadge}
                       </button>
                     );
                   })}
                 </div>
+
+                {/* Explanation Box under options in Review Mode */}
+                {isReviewMode && (
+                  <div className="mt-6 bg-[#FAF9F2] border border-[#E9E8DB] p-5 rounded-2xl space-y-4 animate-fade-in select-text">
+                    <div className="flex items-center justify-between border-b border-[#E9E8DB] pb-3">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#5A5A40]" />
+                        <h4 className="text-sm font-extrabold text-[#3D3D33] uppercase tracking-wider font-sans">Giải thích chi tiết (Explanation)</h4>
+                      </div>
+                      {currentQuestion.part <= 4 && currentQuestion.audioStart !== undefined && (
+                        <button 
+                          onClick={() => jumpToTime(currentQuestion.audioStart!)}
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#5A5A40] hover:bg-[#4A4A35] text-white text-[11px] font-bold rounded-xl shadow-sm transition-all cursor-pointer active:scale-95"
+                        >
+                          <Play className="w-3 h-3 fill-current text-white" />
+                          <span>Nghe lại câu này</span>
+                        </button>
+                      )}
+                    </div>
+                    <div className="text-xs text-[#3D3D33] leading-relaxed whitespace-pre-line font-sans font-semibold">
+                      {currentQuestion.explanation || "Chưa có nội dung giải thích chi tiết cho câu hỏi này."}
+                    </div>
+                  </div>
+                )}
 
               </div>
 
@@ -1478,45 +1898,78 @@ export default function ToeicPractice() {
                         key={q.number}
                         onClick={() => setCurrentQuestionIndex(idx)}
                         className={`py-2 text-[11px] font-bold rounded-lg border font-mono transition-all text-center flex flex-col items-center justify-center relative cursor-pointer ${
-                          isSelected
-                            ? 'bg-[#5A5A40] text-white border-[#5A5A40] ring-2 ring-[#5A5A40]/20'
-                            : hasAnswer
-                              ? 'bg-[#EAEAE3] text-[#5A5A40] border-[#5A5A40]/40'
-                              : 'bg-white text-[#7C7C6B] border-[#E0E0D6] hover:bg-[#F5F5F0]'
+                          isReviewMode
+                            ? isSelected
+                              ? ans === q.correctAnswer
+                                ? 'bg-emerald-600 text-white border-emerald-600 ring-2 ring-emerald-600/35 shadow'
+                                : 'bg-rose-600 text-white border-rose-600 ring-2 ring-rose-600/35 shadow'
+                              : ans === q.correctAnswer
+                                ? 'bg-[#EBF7EE] text-[#1E5E3A] border-[#B2E2BD]'
+                                : 'bg-[#FDF2F2] text-[#9c2424] border-[#F5C2C2]'
+                            : isSelected
+                              ? 'bg-[#5A5A40] text-white border-[#5A5A40] ring-2 ring-[#5A5A40]/20'
+                              : hasAnswer
+                                ? 'bg-[#EAEAE3] text-[#5A5A40] border-[#5A5A40]/40'
+                                : 'bg-white text-[#7C7C6B] border-[#E0E0D6] hover:bg-[#F5F5F0]'
                         }`}
                       >
                         <span>{q.number}</span>
-                        {hasAnswer && (
-                          <span className={`text-[9px] mt-0.5 uppercase ${isSelected ? 'text-white/80' : 'text-[#5A5A40]'}`}>
+                        {hasAnswer ? (
+                          <span className={`text-[9px] mt-0.5 uppercase ${isSelected ? 'text-white/80' : isReviewMode ? (ans === q.correctAnswer ? 'text-emerald-700' : 'text-rose-700') : 'text-[#5A5A40]'}`}>
                             {ans}
                           </span>
-                        )}
+                        ) : isReviewMode ? (
+                          <span className="text-[9px] mt-0.5 text-[#9c2424]">-</span>
+                        ) : null}
                       </button>
                     );
                   })}
                 </div>
 
                 <div className="pt-4 border-t border-[#F5F5F0] space-y-2">
-                  <button 
-                    onClick={handleSubmitExam}
-                    className="w-full py-3 bg-[#5A5A40] hover:bg-[#4A4A35] text-white text-xs font-bold rounded-xl transition-all shadow-sm cursor-pointer text-center"
-                  >
-                    Nộp bài chấm điểm
-                  </button>
-                  {/* ✅ Nút Reset đáp án */}
-                  <button
-                    onClick={() => {
-                      if (window.confirm('Xóa toàn bộ đáp án đã chọn và làm lại từ đầu?')) {
-                        setUserAnswers({});
-                        setCurrentQuestionIndex(0);
-                        localStorage.removeItem(AUTOSAVE_KEY);
-                      }
-                    }}
-                    className="w-full py-2 flex items-center justify-center gap-1.5 text-[#A3A392] hover:text-[#7C7C6B] text-[11px] font-semibold rounded-xl border border-[#E0E0D6] hover:bg-[#F5F5F0] transition-all cursor-pointer"
-                  >
-                    <RefreshCw className="w-3.5 h-3.5" />
-                    <span>Reset toàn bộ đáp án</span>
-                  </button>
+                  {isReviewMode ? (
+                    <>
+                      <button 
+                        onClick={() => setViewMode('result')}
+                        className="w-full py-3 bg-[#5A5A40] hover:bg-[#4A4A35] text-white text-xs font-bold rounded-xl transition-all shadow-sm cursor-pointer text-center flex items-center justify-center gap-2"
+                      >
+                        <Award className="w-4 h-4 text-white" />
+                        <span>Xem kết quả tổng quan</span>
+                      </button>
+                      <button 
+                        onClick={() => {
+                          if (audioRef.current) audioRef.current.pause();
+                          setViewMode('list');
+                        }}
+                        className="w-full py-2.5 bg-[#F5F5F0] hover:bg-[#EAEAE3] text-[#5A5A40] text-xs font-bold rounded-xl border border-[#E0E0D6] transition-all cursor-pointer text-center"
+                      >
+                        Thoát &amp; Chọn đề khác
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button 
+                        onClick={handleSubmitExam}
+                        className="w-full py-3 bg-[#5A5A40] hover:bg-[#4A4A35] text-white text-xs font-bold rounded-xl transition-all shadow-sm cursor-pointer text-center"
+                      >
+                        Nộp bài chấm điểm
+                      </button>
+                      {/* ✅ Nút Reset đáp án */}
+                      <button
+                        onClick={() => {
+                          if (window.confirm('Xóa toàn bộ đáp án đã chọn và làm lại từ đầu?')) {
+                            setUserAnswers({});
+                            setCurrentQuestionIndex(0);
+                            localStorage.removeItem(AUTOSAVE_KEY);
+                          }
+                        }}
+                        className="w-full py-2 flex items-center justify-center gap-1.5 text-[#A3A392] hover:text-[#7C7C6B] text-[11px] font-semibold rounded-xl border border-[#E0E0D6] hover:bg-[#F5F5F0] transition-all cursor-pointer"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5" />
+                        <span>Reset toàn bộ đáp án</span>
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -1528,140 +1981,274 @@ export default function ToeicPractice() {
       )}
 
       {/* 3. EXAM RESULTS VIEW BOARD */}
-      {viewMode === 'result' && scoreResult && activeTest && (
-        <div className="space-y-8 animate-fade-in text-center max-w-4xl mx-auto">
-          
-          {/* Result Summary Hero Box */}
-          <div className="bg-white p-8 rounded-3xl border border-[#E0E0D6] shadow-sm space-y-6 relative overflow-hidden">
-            {/* Soft decorative background illustration */}
-            <div className="absolute -left-12 -top-12 opacity-5 translate-y-2">
-              <Award className="w-64 h-64 text-[#5A5A40]" />
-            </div>
+      {viewMode === 'result' && scoreResult && activeTest && (() => {
+        // Calculate details per part for Bento cards
+        const partCorrectCount: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+        const partTotalCount: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
 
-            <div>
-              <span className="text-xs text-[#7C7C6B] font-bold uppercase tracking-widest bg-emerald-100 text-[#5A5A40] px-3 py-1 rounded-full">
-                Đã hoàn thành thi thử!
-              </span>
-              <h2 className="text-2xl font-bold text-[#3D3D33] mt-3 tracking-tight">KẾT QUẢ ĐỒNG BỘ: {activeTest.name}</h2>
-              <p className="text-xs text-[#7C7C6B] mt-1">Hệ thống đo lường hiệu suất ETS và chấm điểm tự động.</p>
-            </div>
+        allQuestions.forEach(q => {
+          partTotalCount[q.part]++;
+          if (userAnswers[q.number] === q.correctAnswer) {
+            partCorrectCount[q.part]++;
+          }
+        });
 
-            {/* Giant Score Circles */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto py-4">
-              
-              <div className="bg-[#F5F5F0] p-5 rounded-2xl border border-[#E0E0D6] text-center">
-                <div className="text-[10px] uppercase font-bold text-[#7C7C6B] tracking-wide">Điểm Listening</div>
-                <div className="text-3xl font-extrabold text-[#5A5A40] mt-1">{scoreResult.listening} <span className="text-xs text-[#7C7C6B]/80 font-semibold">/ 495</span></div>
-                <p className="text-[11px] text-[#A3A392] font-semibold mt-1.5">Số câu đúng: {scoreResult.listeningCorrect} / {scoreResult.totalListeningInTest}</p>
+        const PART_NAMES: { [key: number]: string } = {
+          1: 'Part 1: Hình ảnh',
+          2: 'Part 2: Hỏi & Đáp',
+          3: 'Part 3: Hội thoại',
+          4: 'Part 4: Độc thoại',
+          5: 'Part 5: Điền câu',
+          6: 'Part 6: Điền đoạn',
+          7: 'Part 7: Đọc hiểu'
+        };
+
+        const PART_DESCS: { [key: number]: string } = {
+          1: 'Mô tả hình ảnh (6 câu)',
+          2: 'Hỏi & Đáp hội thoại (25 câu)',
+          3: 'Đoạn hội thoại ngắn (39 câu)',
+          4: 'Bài phát biểu ngắn (30 câu)',
+          5: 'Hoàn thành câu đọc (30 câu)',
+          6: 'Hoàn thành văn đoạn (16 câu)',
+          7: 'Đọc hiểu tài liệu (54 câu)'
+        };
+
+        return (
+          <div className="space-y-8 animate-fade-in text-center max-w-4xl mx-auto">
+            
+            {/* Result Summary Hero Box */}
+            <div className="bg-white p-8 rounded-3xl border border-[#E0E0D6] shadow-sm space-y-6 relative overflow-hidden">
+              {/* Soft decorative background illustration */}
+              <div className="absolute -left-12 -top-12 opacity-5 translate-y-2">
+                <Award className="w-64 h-64 text-[#5A5A40]" />
               </div>
 
-              <div className="bg-[#F5F5F0] p-5 rounded-2xl border border-[#E0E0D6] text-center">
-                <div className="text-[10px] uppercase font-bold text-[#7C7C6B] tracking-wide">Điểm Reading</div>
-                <div className="text-3xl font-extrabold text-[#5A5A40] mt-1">{scoreResult.reading} <span className="text-xs text-[#7C7C6B]/80 font-semibold">/ 495</span></div>
-                <p className="text-[11px] text-[#A3A392] font-semibold mt-1.5">Số câu đúng: {scoreResult.readingCorrect} / {scoreResult.totalReadingInTest}</p>
-              </div>
-
-              <div className="bg-[#5A5A40] text-white p-5 rounded-2xl text-center shadow-sm">
-                <div className="text-[10px] uppercase font-bold text-white/70 tracking-wide">Tổng điểm TOEIC</div>
-                <div className="text-4xl font-black text-white mt-1">{scoreResult.total} <span className="text-xs text-white/70 font-semibold">/ 990</span></div>
-                <p className="text-[11px] text-white/80 font-semibold mt-1.5">Tổng số câu đúng: {scoreResult.correctCount} / {allQuestions.length}</p>
-              </div>
-
-            </div>
-
-            <div className="border-t border-[#F5F5F0] pt-6 flex flex-col md:flex-row gap-4 items-center justify-between">
-              <div className="text-left">
-                <span className="text-xs font-bold text-[#5A5A40] flex items-center gap-1">
-                  <Sparkles className="w-4 h-4" />
-                  Bạn có 150 câu hỏi cần rà soát lại giải thích chi tiết ở dưới.
+              <div>
+                <span className="text-xs text-[#7C7C6B] font-bold uppercase tracking-widest bg-[#5A5A40]/10 text-[#5A5A40] px-3 py-1 rounded-full border border-[#5A5A40]/20">
+                  Đã hoàn thành thi thử!
                 </span>
-                <p className="text-[11px] text-[#7C7C6B] mt-0.5">Tiến trình đã được lưu vào hệ thống lịch sử của trình duyệt cá nhân.</p>
+                <h2 className="text-2xl font-bold text-[#3D3D33] mt-3 tracking-tight">KẾT QUẢ ĐỒNG BỘ: {activeTest.name}</h2>
+                <p className="text-xs text-[#7C7C6B] mt-1 font-sans">Hệ thống đo lường hiệu suất ETS và tự động tính điểm chuẩn.</p>
               </div>
 
-              <div className="flex gap-2">
-                <button 
-                  onClick={() => setViewMode('list')}
-                  className="px-5 py-2.5 bg-[#F5F5F0] hover:bg-[#EAEAE3] text-[#5A5A40] text-xs font-bold rounded-xl border border-[#E0E0D6] transition-all cursor-pointer active:scale-95"
-                >
-                  Về danh sách đề
-                </button>
-                <button 
-                  onClick={() => {
-                    // Start review on same list
-                    setCurrentQuestionIndex(0);
-                    setViewMode('exam'); // reuse exam tab for browsing answers & explanations!
-                    // Note: user can browse explanations because we will display correct indicators in the review mode now!
-                  }}
-                  className="px-5 py-2.5 bg-[#5A5A40] hover:bg-[#4A4A35] text-white text-xs font-bold rounded-xl shadow-sm transition-all cursor-pointer active:scale-95"
-                >
-                  Xem lại và Xem Giải thích chi tiết
-                </button>
+              {/* Giant Score Circles */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto py-4">
+                
+                <div className="bg-[#FAF9F2] p-5 rounded-2xl border border-[#E9E8DB] text-center shadow-xs">
+                  <div className="text-[10px] uppercase font-bold text-[#7C7C6B] tracking-wide">Điểm Listening</div>
+                  <div className="text-3xl font-extrabold text-[#5A5A40] mt-1">{scoreResult.listening} <span className="text-xs text-[#7C7C6B]/80 font-semibold">/ 495</span></div>
+                  <p className="text-[11px] text-[#A3A392] font-semibold mt-1.5">Số câu đúng: {scoreResult.listeningCorrect} / {scoreResult.totalListeningInTest}</p>
+                </div>
+
+                <div className="bg-[#FAF9F2] p-5 rounded-2xl border border-[#E9E8DB] text-center shadow-xs">
+                  <div className="text-[10px] uppercase font-bold text-[#7C7C6B] tracking-wide">Điểm Reading</div>
+                  <div className="text-3xl font-extrabold text-[#5A5A40] mt-1">{scoreResult.reading} <span className="text-xs text-[#7C7C6B]/80 font-semibold">/ 495</span></div>
+                  <p className="text-[11px] text-[#A3A392] font-semibold mt-1.5">Số câu đúng: {scoreResult.readingCorrect} / {scoreResult.totalReadingInTest}</p>
+                </div>
+
+                <div className="bg-[#5A5A40] text-white p-5 rounded-2xl text-center shadow-sm">
+                  <div className="text-[10px] uppercase font-bold text-white/70 tracking-wide">Tổng điểm TOEIC</div>
+                  <div className="text-4xl font-black text-white mt-1">{scoreResult.total} <span className="text-xs text-white/70 font-semibold">/ 990</span></div>
+                  <p className="text-[11px] text-white/80 font-semibold mt-1.5">Tổng số câu đúng: {scoreResult.correctCount} / {allQuestions.length}</p>
+                </div>
+
+              </div>
+
+              <div className="border-t border-[#F5F5F0] pt-6 flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div className="text-left">
+                  <span className="text-xs font-bold text-[#5A5A40] flex items-center gap-1.5 font-sans">
+                    <Sparkles className="w-4 h-4 text-[#5A5A40]" />
+                    <span>Chúng tôi tự động phân bổ hiệu suất chi tiết các Part thành Bento Cards dưới đây.</span>
+                  </span>
+                  <p className="text-[11px] text-[#7C7C6B] mt-0.5">Tiến trình đã được lưu vào hệ thống lịch sử của trình duyệt cá nhân.</p>
+                </div>
+
+                <div className="flex gap-2 shrink-0">
+                  <button 
+                    onClick={() => {
+                      if (audioRef.current) audioRef.current.pause();
+                      setViewMode('list');
+                    }}
+                    className="px-5 py-2.5 bg-[#F5F5F0] hover:bg-[#EAEAE3] text-[#5A5A40] text-xs font-bold rounded-xl border border-[#E0E0D6] transition-all cursor-pointer active:scale-95 text-center flex items-center justify-center"
+                  >
+                    Về danh sách đề
+                  </button>
+                  <button 
+                    onClick={() => {
+                      setCurrentQuestionIndex(0);
+                      setIsReviewMode(true);
+                      setViewMode('exam');
+                    }}
+                    className="px-5 py-2.5 bg-[#5A5A40] hover:bg-[#4A4A35] text-white text-xs font-bold rounded-xl shadow-sm transition-all cursor-pointer active:scale-95 text-center flex items-center justify-center gap-1.5"
+                  >
+                    <span>Luyện lại câu sai</span>
+                  </button>
+                </div>
               </div>
             </div>
 
-          </div>
+            {/* BENTO GRID: 7 PARTS SUMMARY */}
+            <div className="text-left space-y-4">
+              <h3 className="text-sm font-extrabold text-[#3D3D33] uppercase tracking-wider flex items-center gap-2">
+                <LayoutGrid className="w-4 h-4 text-[#5A5A40]" />
+                <span>Hiệu suất Chi tiết các Phần thi (Bento Grid)</span>
+              </h3>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
+                {[1, 2, 3, 4, 5, 6, 7].map((part) => {
+                  const correct = partCorrectCount[part] || 0;
+                  const total = partTotalCount[part] || 0;
+                  const rate = total > 0 ? Math.round((correct / total) * 100) : 0;
+                  
+                  let cardBg = 'border-[#E0E0D6] bg-white';
+                  let textColor = 'text-[#5A5A40]';
+                  if (rate >= 80) {
+                    cardBg = 'border-emerald-200 bg-emerald-50/20';
+                    textColor = 'text-emerald-800';
+                  } else if (rate >= 55) {
+                    cardBg = 'border-amber-200 bg-amber-50/15';
+                    textColor = 'text-amber-800';
+                  } else if (total > 0) {
+                    cardBg = 'border-rose-200 bg-rose-50/15';
+                    textColor = 'text-rose-800';
+                  }
 
-          {/* DETAILED EXPLANATIONS ROW BY ROW */}
-          <div className="text-left space-y-6">
-            <h3 className="text-lg font-bold text-[#3D3D33] border-b border-[#E0E0D6] pb-3 flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-[#5A5A40]" />
-              <span>Phân tích Đáp án &amp; Giải thích chi tiết từng câu hỏi</span>
-            </h3>
+                  return (
+                    <div 
+                      key={part} 
+                      className={`p-3.5 rounded-2xl border text-center flex flex-col justify-between transition-all hover:-translate-y-0.5 ${cardBg}`}
+                    >
+                      <div>
+                        <div className="text-[10px] font-bold text-[#7C7C6B] uppercase tracking-wider line-clamp-1">{PART_NAMES[part]}</div>
+                        <div className="text-[9px] text-[#A3A392] mt-0.5 leading-tight">{PART_DESCS[part]}</div>
+                      </div>
+                      <div className="my-3">
+                        <span className={`text-2xl font-black ${textColor}`}>{correct}</span>
+                        <span className="text-xs text-[#A3A392] font-semibold"> / {total}</span>
+                      </div>
+                      <div className="w-full bg-[#EAEAE3] rounded-full h-1.5 overflow-hidden">
+                        <div 
+                          className={`h-full rounded-full ${rate >= 80 ? 'bg-emerald-600' : rate >= 55 ? 'bg-amber-600' : 'bg-rose-500'}`} 
+                          style={{ width: `${rate}%` }}
+                        />
+                      </div>
+                      <div className="text-[9px] font-mono text-[#7C7C6B] mt-1.5 font-bold">{rate}% Đúng</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
 
-            <div className="space-y-4">
-              {allQuestions.map((q) => {
-                const isCorrect = userAnswers[q.number] === q.correctAnswer;
-                const userAns = userAnswers[q.number] || "Chưa làm";
+            {/* DETAILED EXPLANATIONS ROW BY ROW */}
+            <div className="text-left space-y-6 pt-2">
+              <div className="flex items-center justify-between border-b border-[#E0E0D6] pb-3">
+                <h3 className="text-lg font-bold text-[#3D3D33] flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-[#5A5A40]" />
+                  <span>Phân tích Đáp án &amp; Giảng giải chi tiết từng câu (200 câu)</span>
+                </h3>
+                <span className="text-xs text-[#7C7C6B] font-semibold">Cuộn để xem toàn bộ đề thi</span>
+              </div>
 
-                return (
-                  <div key={q.id} className="bg-white p-5 rounded-2xl border border-[#E0E0D6] space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-[#5A5A40] bg-[#F5F5F0] px-2.5 py-1 rounded-lg">
-                          Câu {q.number} (Part {q.part})
-                        </span>
+              <div className="space-y-5">
+                {allQuestions.map((q) => {
+                  const isCorrect = userAnswers[q.number] === q.correctAnswer;
+                  const userAns = userAnswers[q.number] || "Chưa làm";
+
+                  return (
+                    <div key={q.id} className="bg-white p-6 rounded-2xl border border-[#E0E0D6] space-y-4 shadow-xs hover:border-[#7C7C6B]/40 transition-colors">
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#FAF9F5] pb-3">
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-xs font-bold text-[#5A5A40] bg-[#F5F5F0] px-3 py-1.5 rounded-xl border border-[#E0E0D6]">
+                            Câu {q.number} (Part {q.part})
+                          </span>
+                          
+                          <span className={`px-2.5 py-0.5 text-[10px] font-bold rounded-full ${
+                            isCorrect 
+                              ? 'bg-emerald-100 text-emerald-800' 
+                              : 'bg-rose-100 text-rose-800'
+                          }`}>
+                            {isCorrect ? 'ĐÚNG' : 'SAI'}
+                          </span>
+                        </div>
+
+                        <div className="text-xs text-[#7C7C6B] font-medium font-mono bg-[#FAF9F5] px-3 py-1 rounded-lg border border-[#F0EFEB]">
+                          Bạn chọn: <strong className={isCorrect ? 'text-emerald-700 font-extrabold' : 'text-rose-700 font-extrabold'}>{userAns}</strong> | Đáp án đúng: <strong className="text-emerald-700 font-extrabold">{q.correctAnswer}</strong>
+                        </div>
+                      </div>
+
+                      {q.image && (
+                        <div className="max-w-md bg-[#F5F5F0] p-1.5 rounded-xl border border-[#E0E0D6] overflow-hidden">
+                          <img src={q.image} alt={`Pic ${q.number}`} className="max-h-[220px] w-auto rounded object-contain" referrerPolicy="no-referrer" />
+                        </div>
+                      )}
+
+                      {q.passageText && (
+                        <div className="bg-[#FBFBFA] border border-[#F2F2EB] p-4 rounded-xl text-xs text-[#6B6B5B] whitespace-pre-wrap font-sans leading-relaxed border-l-4 border-[#5A5A40]/40">
+                          {q.passageText}
+                        </div>
+                      )}
+
+                      <div className="space-y-4">
+                        <p className="text-[15px] font-bold text-[#3D3D33]">{q.questionText || "Hãy nghe câu hỏi phần Listening và chọn phương án đúng."}</p>
                         
-                        <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${
-                          isCorrect 
-                            ? 'bg-emerald-100 text-emerald-800' 
-                            : 'bg-rose-100 text-rose-800'
-                        }`}>
-                          {isCorrect ? 'Đúng' : 'Sai'}
-                        </span>
-                      </div>
+                        {/* Interactive-looking options inside the result item list */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {q.options.map((opt) => {
+                            const isOptSelected = userAns === opt.label;
+                            const isOptCorrect = opt.label === q.correctAnswer;
 
-                      <div className="text-xs text-[#7C7C6B] font-medium font-mono">
-                        Chọn: <strong className="text-[#3D3D33]">{userAns}</strong> | Đáp án đúng: <strong className="text-emerald-700">{q.correctAnswer}</strong>
+                            let optClass = 'bg-white border-[#E0E0D6] text-[#6B6B5B]';
+                            let circleClass = 'bg-[#F2F2EB] text-[#7C7C6B]';
+
+                            if (isOptCorrect) {
+                              optClass = 'bg-[#FAFDFB] border-emerald-200 text-[#1E5E3A] font-medium ring-1 ring-emerald-50';
+                              circleClass = 'bg-[#2E7D32] text-white';
+                            } else if (isOptSelected) {
+                              optClass = 'bg-[#FDF6F6] border-rose-200 text-[#9C2424] font-medium';
+                              circleClass = 'bg-[#C62828] text-white';
+                            }
+
+                            return (
+                              <div key={opt.label} className={`flex items-center gap-3 p-3 rounded-xl border text-xs leading-normal select-none ${optClass}`}>
+                                <span className={`w-6 h-6 rounded-lg font-bold flex items-center justify-center text-[11px] shrink-0 ${circleClass}`}>
+                                  {opt.label}
+                                </span>
+                                <span className="font-sans font-semibold leading-tight">{opt.text}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {/* Explanation Box inside results card */}
+                        <div className="bg-[#FAF9F2] border border-[#E9E8DB] p-4.5 rounded-2xl space-y-3">
+                          <div className="flex items-center justify-between border-b border-[#E9E8DB] pb-2">
+                            <span className="text-xs font-bold text-[#3D3D33] uppercase tracking-wider flex items-center gap-1.5 font-sans">
+                              <span className="w-2 h-2 rounded-full bg-[#5A5A40]" />
+                              Giải thích đáp án chi tiết:
+                            </span>
+
+                            {q.part <= 4 && q.audioStart !== undefined && (
+                              <button
+                                onClick={() => jumpToTime(q.audioStart!)}
+                                className="flex items-center gap-1 px-2.5 py-1 bg-[#5A5A40] hover:bg-[#4A4A35] text-white text-[10px] font-bold rounded-lg transition-all cursor-pointer active:scale-95 shadow-sm"
+                              >
+                                <Play className="w-2.5 h-2.5 fill-current text-white" />
+                                <span>Phát lại đoạn nghe</span>
+                              </button>
+                            )}
+                          </div>
+                          <p className="text-xs text-[#3D3D33] leading-relaxed whitespace-pre-line font-sans font-medium">{q.explanation}</p>
+                        </div>
                       </div>
                     </div>
-
-                    {q.image && (
-                      <div className="max-w-[200px] bg-[#F5F5F0] p-1 rounded-lg border border-[#E0E0D6] overflow-hidden">
-                        <img src={q.image} alt="Thumbnail explanation" className="w-[180px] h-auto rounded" referrerPolicy="no-referrer" />
-                      </div>
-                    )}
-
-                    {q.passageText && (
-                      <p className="text-xs font-mono bg-[#FBFBFA] border border-[#F2F2EB] p-2.5 rounded text-[#7C7C6B]">
-                        {q.passageText.substring(0, 150)}...
-                      </p>
-                    )}
-
-                    <div className="space-y-1 select-text">
-                      <p className="text-sm font-semibold text-[#3D3D33]">{q.questionText || "Nhìn đề bài phần Listening"}</p>
-                      <div className="pl-3 border-l-2 border-[#5A5A40]/40 mt-2 space-y-1">
-                        <p className="text-xs text-[#7C7C6B] font-semibold">Tóm tắt cách giải:</p>
-                        <p className="text-xs text-[#3d3d33] leading-relaxed font-sans font-medium">{q.explanation}</p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-        </div>
-      )}
+          </div>
+        );
+      })()}
 
       {/* 4. PRACTICE HISTORY VIEW */}
       {viewMode === 'history' && (
